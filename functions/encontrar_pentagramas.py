@@ -46,19 +46,19 @@ def lista_pentagramas(lineas, distancia):
     return pentagramas
 
 
-def get_corte_pentagramas(pentagramas):
+def get_corte_pentagramas(pentagramas, length_img):
     corte_pentagramas = []
     if len(pentagramas) <= 1:
-        corte_pentagramas.append((0, len(img) - 1))
+        corte_pentagramas.append((0, length_img - 1))
     else:
         for i in range(len(pentagramas)):
             if i == 0:
                 corte_pentagramas.append((0, pentagramas[i][4] + (pentagramas[i + 1][0] - pentagramas[i][4]) // 2))
             elif i == len(pentagramas) - 1:
-                corte_pentagramas.append((pentagramas[i -1][4] + (pentagramas[i][0] - pentagramas[i -1][4]) // 2, len(img) - 1))
+                corte_pentagramas.append((pentagramas[i -1][4] + (pentagramas[i][0] - pentagramas[i -1][4]) // 2, length_img - 1))
             else:
                 corte_pentagramas.append((pentagramas[i -1][4] + (pentagramas[i][0] - pentagramas[i -1][4]) // 2, pentagramas[i][4] + (pentagramas[i + 1][0] - pentagramas[i][4]) // 2))
-            
+    return corte_pentagramas
 
 
 def encontrar_pentagramas(img, UMBRAL_NEGRO, FRACCION_MINIMA_PIXELES_NEGROS):
@@ -96,6 +96,6 @@ def encontrar_pentagramas(img, UMBRAL_NEGRO, FRACCION_MINIMA_PIXELES_NEGROS):
 
     pentagramas = lista_pentagramas(lineas, distancia)
 
-    corte_pentagramas = get_corte_pentagramas(pentagramas)
+    corte_pentagramas = get_corte_pentagramas(pentagramas, len(img))
 
     return pentagramas, corte_pentagramas, distancia

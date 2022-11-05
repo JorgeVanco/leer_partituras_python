@@ -22,7 +22,7 @@ UMBRAL_NEGRO  = 200  #considero negro cualquier valor menor que 140
 FRACCION_MINIMA_PIXELES_NEGROS = 3/4
 # index_first_row = encontrar_primer_pentagrama(img)
 pentagramas, corte_pentagramas, distancia = encontrar_pentagramas(img, UMBRAL_NEGRO, FRACCION_MINIMA_PIXELES_NEGROS)
-for pentagrama in pentagramas:
+for pentagrama in corte_pentagramas:
     print(pentagrama)
     recorrer_pentagrama(img[pentagrama[0]: pentagrama[-1]], distancia, UMBRAL_NEGRO)
     cv.imshow(str(pentagrama), img[pentagrama[0]: pentagrama[-1]])

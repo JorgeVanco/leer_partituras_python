@@ -1,0 +1,1 @@
+[{'nota': 'Fa', 'octava_alta': False, 'octava_baja': False}, {'nota': 'Sol', 'octava_alta': False, 'octava_baja': False}, {'nota': 'La', 'octava_alta': False, 'octava_baja': False}, {'nota': 'Si', 'octava_alta': False, 'octava_baja': False}, {'nota': 'Fa', 'octava_alta': False, 'octava_baja': False}, {'nota': 'La', 'octava_alta': False, 'octava_baja': False}]

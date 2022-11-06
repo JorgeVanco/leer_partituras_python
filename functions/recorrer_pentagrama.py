@@ -91,12 +91,10 @@ def recorrer_pentagrama(pentagrama, distancia, UMBRAL_NEGRO):
                 posiciones = [posicion_vertical, posicion_vertical + kernel_size, posicion_horizontal,posicion_horizontal + step]
                 posiciones_nuevas = agrandar_cuadrado(pentagrama, posiciones, UMBRAL_NEGRO)
                 cuadrado = pentagrama[posiciones_nuevas[0] : posiciones_nuevas[1], posiciones_nuevas[2]: posiciones_nuevas[3]]
-                cv.imshow("AGRANDADo cuadrado"+str(posicion_vertical) + str(posicion_horizontal), cuadrado)
                 posicion_vertical = len(pentagrama)
                 posicion_horizontal = posiciones_nuevas[3]
-                figuras_en_pentagrama.append(cuadrado)
+                figuras_en_pentagrama.append((cuadrado, posiciones_nuevas)) # tupla con el cuadrado y sus posiciones
 
             posicion_vertical += kernel_size//2  # Es la mitad porque tiene que recorrer
         posicion_horizontal += step
-    cv.waitKey(0)
     return figuras_en_pentagrama

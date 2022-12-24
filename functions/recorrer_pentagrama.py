@@ -1,59 +1,3 @@
-def agrandar_derecha(posiciones_cuadrado, suma_actual, UMBRAL_NEGRO, pentagrama, AUMENTO_MINIMO):
-
-    agrandar_derecha = True
-    while agrandar_derecha:
-        posiciones_cuadrado[3] += 1
-        nuevo_cuadrado = pentagrama[posiciones_cuadrado[0] : posiciones_cuadrado[1], posiciones_cuadrado[2]: posiciones_cuadrado[3]]
-        # comparar con cuadrado anterior y ver si es mayor
-        suma_nueva = (nuevo_cuadrado < UMBRAL_NEGRO).sum()
-        if suma_nueva - suma_actual < AUMENTO_MINIMO:
-            agrandar_derecha = False
-            posiciones_cuadrado[3] -= 1
-        suma_actual = suma_nueva
-    return posiciones_cuadrado
-
-def agrandar_izquierda(posiciones_cuadrado, suma_actual, UMBRAL_NEGRO:int, pentagrama, AUMENTO_MINIMO):
-
-    agrandar_izquierda = True
-    while agrandar_izquierda:
-        posiciones_cuadrado[2] -= 1
-        nuevo_cuadrado = pentagrama[posiciones_cuadrado[0] : posiciones_cuadrado[1], posiciones_cuadrado[2]: posiciones_cuadrado[3]]
-        # comparar con cuadrado anterior y ver si es mayor
-        suma_nueva = (nuevo_cuadrado < UMBRAL_NEGRO).sum()
-        if suma_nueva - suma_actual < AUMENTO_MINIMO:
-            agrandar_izquierda = False
-            posiciones_cuadrado[2] += 1
-        suma_actual = suma_nueva
-    return posiciones_cuadrado
-
-def agrandar_arriba(posiciones_cuadrado, suma_actual, UMBRAL_NEGRO:int, pentagrama, AUMENTO_MINIMO):
-
-    agrandar_arriba:bool = True
-    while agrandar_arriba:
-        posiciones_cuadrado[0] -= 1
-        nuevo_cuadrado = pentagrama[posiciones_cuadrado[0] : posiciones_cuadrado[1], posiciones_cuadrado[2]: posiciones_cuadrado[3]]
-        # comparar con cuadrado anterior y ver si es mayor
-        suma_nueva = (nuevo_cuadrado < UMBRAL_NEGRO).sum()
-        if suma_nueva - suma_actual < AUMENTO_MINIMO:
-            agrandar_arriba = False
-            posiciones_cuadrado[0] += 1
-        suma_actual = suma_nueva
-    return posiciones_cuadrado
-
-def agrandar_abajo(posiciones_cuadrado, suma_actual, UMBRAL_NEGRO:int, pentagrama, AUMENTO_MINIMO):
-
-    agrandar_abajo:bool = True
-    while agrandar_abajo:
-        posiciones_cuadrado[1] += 1
-        nuevo_cuadrado = pentagrama[posiciones_cuadrado[0] : posiciones_cuadrado[1], posiciones_cuadrado[2]: posiciones_cuadrado[3]]
-        # comparar con cuadrado anterior y ver si es mayor
-        suma_nueva = (nuevo_cuadrado < UMBRAL_NEGRO).sum()
-        if suma_nueva - suma_actual < AUMENTO_MINIMO:
-            agrandar_abajo = False
-            posiciones_cuadrado[1] -= 1
-        suma_actual = suma_nueva
-    return posiciones_cuadrado
-
 
 def agrandar_lado(posiciones_cuadrado:list[int], suma_actual:int, UMBRAL_NEGRO:int, pentagrama:list[list[int]], AUMENTO_MINIMO:int, lado:int) -> tuple[list[int], int]:
     """
@@ -95,16 +39,6 @@ def agrandar_cuadrado(pentagrama:list[list[int]], posiciones_cuadrado:list[int],
     for lado in range(3,-1, -1):
         posiciones_cuadrado, suma_actual = agrandar_lado(posiciones_cuadrado, suma_actual, UMBRAL_NEGRO, pentagrama, AUMENTO_MINIMO, lado)
 
-    # posiciones_cuadrado, suma_actual = agrandar_lado(posiciones_cuadrado, suma_actual, UMBRAL_NEGRO, pentagrama, AUMENTO_MINIMO, 3)
-    # posiciones_cuadrado, suma_actual = agrandar_lado(posiciones_cuadrado, suma_actual, UMBRAL_NEGRO, pentagrama, AUMENTO_MINIMO, 2)
-    # posiciones_cuadrado, suma_actual = agrandar_lado(posiciones_cuadrado, suma_actual, UMBRAL_NEGRO, pentagrama, AUMENTO_MINIMO, 1)
-    # posiciones_cuadrado, suma_actual = agrandar_lado(posiciones_cuadrado, suma_actual, UMBRAL_NEGRO, pentagrama, AUMENTO_MINIMO, 0)
-
-
-    # posiciones_cuadrado = agrandar_derecha(posiciones_cuadrado, suma_actual, UMBRAL_NEGRO, pentagrama, AUMENTO_MINIMO)
-    # posiciones_cuadrado = agrandar_izquierda(posiciones_cuadrado, suma_actual, UMBRAL_NEGRO, pentagrama, AUMENTO_MINIMO)
-    # posiciones_cuadrado = agrandar_arriba(posiciones_cuadrado, suma_actual, UMBRAL_NEGRO, pentagrama, AUMENTO_MINIMO)
-    # posiciones_cuadrado = agrandar_abajo(posiciones_cuadrado, suma_actual, UMBRAL_NEGRO, pentagrama, AUMENTO_MINIMO)
     return posiciones_cuadrado
 
 

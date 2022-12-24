@@ -48,7 +48,7 @@ def encontrar_menor_distancia(punto_medio:int, rows_pentagrama:int) -> tuple[int
 
 
 # medir las distancias a las distintas filas(con el la mitad entre ellas tambien)
-def encontrar_posicion_en_pentagrama(punto_medio, rows_pentagrama, distancia):
+def encontrar_posicion_en_pentagrama(punto_medio:float, rows_pentagrama:int, distancia:int) -> int:
     menor_distancia, row_menor_distancia = encontrar_menor_distancia(
         punto_medio, rows_pentagrama)
 
@@ -59,10 +59,9 @@ def encontrar_posicion_en_pentagrama(punto_medio, rows_pentagrama, distancia):
         elif row_menor_distancia == 9:
             row_menor_distancia += menor_distancia // (distancia / 2)
     return row_menor_distancia
-    numero_nota_musical = 0
 
 
-def diferenciar_figuras(figura, posiciones, rows_pentagrama, distancia):
+def diferenciar_figuras(figura, posiciones, rows_pentagrama, distancia) -> dict:
 
     NOTAS_MUSICALES = {0: "Do", 1: "Re", 2: "Mi", 
                         3: "Fa", 4: "Sol", 5: "La", 6: "Si"}
@@ -72,7 +71,6 @@ def diferenciar_figuras(figura, posiciones, rows_pentagrama, distancia):
     altura_pentagrama:int = rows_pentagrama[-1] - rows_pentagrama[0]
     if  altura >= altura_pentagrama:
         # se quita las claves de sol, el tiempo, las lineas verticales
-        punto_medio = posiciones[0] + (posiciones[1] - posiciones[0]) / 2
         if posiciones[3] - posiciones[2] > 1/3 * altura:
             # cv.imshow("clave de sol"+str(posiciones), figura)
             print("Clave de SOl", posiciones)

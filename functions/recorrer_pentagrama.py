@@ -31,7 +31,7 @@ def agrandar_lado(posiciones_cuadrado:list[int], suma_actual:int, UMBRAL_NEGRO:i
     return posiciones_cuadrado, suma_actual
 
 def agrandar_cuadrado(pentagrama:list[list[int]], posiciones_cuadrado:list[int], UMBRAL_NEGRO:int) -> list[int]:
-    AUMENTO_MINIMO:int = 3
+    AUMENTO_MINIMO:int = 6
     cuadrado:list[list[int]] = pentagrama[posiciones_cuadrado[0] : posiciones_cuadrado[1], posiciones_cuadrado[2]: posiciones_cuadrado[3]]
     suma_actual:int = (cuadrado < UMBRAL_NEGRO).sum()
 
@@ -51,7 +51,6 @@ def recorrer_pentagrama(pentagrama, distancia:int, UMBRAL_NEGRO:int):
         UMBRAL_NEGRO (int)
 
     Returns: figuras_en_pentagrama (dict): figuras del pentagrama
-
     '''
 
     # cv.imshow(str(pentagrama), pentagrama)

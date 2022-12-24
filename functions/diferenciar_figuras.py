@@ -1,14 +1,21 @@
 import cv2 as cv
 
 
-def get_distancia(punto_medio, row) -> int:
+def get_distancia(punto_medio:int, row:int) -> int:
     """
-    Args: punto_medio ()
+    Calcula la distancia desde el punto medio de la figura a la fila
+
+    Args: 
+        punto_medio (int): El punto medio de la figura
+        row (int): La fila en la que nos encontramos, es la fila de la línea del pentagrama
+    
+    Returns:
+        La distancia entre el punto medio y la fila (int)
     """
     return abs(row - punto_medio)
 
 
-def encontrar_menor_distancia(punto_medio:int, rows_pentagrama:int):
+def encontrar_menor_distancia(punto_medio:int, rows_pentagrama:int) -> tuple[int]:
     """
     
     """
@@ -67,7 +74,7 @@ def diferenciar_figuras(figura, posiciones, rows_pentagrama, distancia):
         # se quita las claves de sol, el tiempo, las lineas verticales
         punto_medio = posiciones[0] + (posiciones[1] - posiciones[0]) / 2
         if posiciones[3] - posiciones[2] > 1/3 * altura:
-            cv.imshow("clave de sol"+str(posiciones), figura)
+            # cv.imshow("clave de sol"+str(posiciones), figura)
             print("Clave de SOl", posiciones)
             cv.waitKey(0)
             return {"nota" : "clave de sol"}   # habria que diferencia entre clave de sol, de fa, ...
@@ -75,7 +82,7 @@ def diferenciar_figuras(figura, posiciones, rows_pentagrama, distancia):
         return {"nota" : "otra figura"} 
     elif altura >= 0.5 * (altura_pentagrama):
         print("Posible silencio")
-        cv.imshow("silencio" + " "+str(posiciones), figura)
+        # cv.imshow("silencio" + " "+str(posiciones), figura)
 
         return {"nota" : "silencio"}
     punto_medio = posiciones[0] + (posiciones[1] - posiciones[0]) / 2

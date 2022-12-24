@@ -1,4 +1,4 @@
-def get_distancia_entre_lineas(distancias: list):
+def get_distancia_entre_lineas(distancias: list) -> int:
     '''
     Busca la distancia entre las líneas más común
 
@@ -16,17 +16,17 @@ def get_distancia_entre_lineas(distancias: list):
             conteo_distancias[distancia] += 1
 
     if conteo_distancias:
-        frecuencias_distancias = list(conteo_distancias.values())
-        frecuencia_distancia_mas_comun = max(frecuencias_distancias)
+        frecuencias_distancias:list = list(conteo_distancias.values())
+        frecuencia_distancia_mas_comun:int = max(frecuencias_distancias)
 
         for cada_distancia in conteo_distancias:
             if conteo_distancias[cada_distancia] == frecuencia_distancia_mas_comun:
-                distancia = cada_distancia
+                distancia:int = cada_distancia
 
     return distancia
 
 
-def lista_pentagramas(lineas:list, distancia:int):
+def lista_pentagramas(lineas:list, distancia:int) -> list:
     """
     Agrupa todas las líneas por pentagramas
 
@@ -66,7 +66,7 @@ def lista_pentagramas(lineas:list, distancia:int):
     return pentagramas
 
 
-def get_corte_pentagramas(pentagramas: list, length_img: int):
+def get_corte_pentagramas(pentagramas: list, length_img: int) -> list[tuple]:
     """
     Crea unos cortes en la imagen que contienen a un pentagrama cada uno.
     Cada corte se encuentra en la mitad entre dos pentagramas
@@ -91,8 +91,8 @@ def get_corte_pentagramas(pentagramas: list, length_img: int):
                 corte_pentagramas.append(
                     (pentagramas[i - 1][4] + (pentagramas[i][0] - pentagramas[i - 1][4]) // 2, length_img - 1))
             else:
-                corte_pentagramas.append((pentagramas[i - 1][4] + (pentagramas[i][0] - pentagramas[i - 1][4]) //
-                                         2, pentagramas[i][4] + (pentagramas[i + 1][0] - pentagramas[i][4]) // 2))
+                corte_pentagramas.append((pentagramas[i - 1][4] + (pentagramas[i][0] - pentagramas[i - 1][4]) // 2,
+                        pentagramas[i][4] + (pentagramas[i + 1][0] - pentagramas[i][4]) // 2))
     return corte_pentagramas
 
 
@@ -143,7 +143,7 @@ def contar_pixeles_negros_en_fila(start: int, row: list, UMBRAL_NEGRO: int) -> i
     return count
 
 
-def encontrar_pentagramas(img: list, UMBRAL_NEGRO: int, FRACCION_MINIMA_PIXELES_NEGROS: float):
+def encontrar_pentagramas(img: list, UMBRAL_NEGRO: int, FRACCION_MINIMA_PIXELES_NEGROS: float) -> tuple:
     '''
     Args: 
         img (list): imagen a procesar
@@ -164,7 +164,7 @@ def encontrar_pentagramas(img: list, UMBRAL_NEGRO: int, FRACCION_MINIMA_PIXELES_
 
     for row in range(len(img)):
 
-        index_pixel, found_black_pixel: bool = buscar_pixel_negro_en_fila(img[row], UMBRAL_NEGRO, FRACCION_MINIMA_PIXELES_NEGROS)
+        index_pixel, found_black_pixel = buscar_pixel_negro_en_fila(img[row], UMBRAL_NEGRO, FRACCION_MINIMA_PIXELES_NEGROS)
 
         if found_black_pixel:
             count = contar_pixeles_negros_en_fila(
@@ -183,6 +183,6 @@ def encontrar_pentagramas(img: list, UMBRAL_NEGRO: int, FRACCION_MINIMA_PIXELES_
 
     pentagramas: list = lista_pentagramas(lineas, distancia)
 
-    corte_pentagramas = get_corte_pentagramas(pentagramas, len(img))
+    corte_pentagramas:list[tuple] = get_corte_pentagramas(pentagramas, len(img))
 
     return pentagramas, corte_pentagramas, distancia

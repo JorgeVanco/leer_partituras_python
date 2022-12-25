@@ -13,7 +13,7 @@ if __name__ == "__main__":
     if img is None:
         print("Could not read the image.")
     h,w = img.shape[:2]
-    img = cv.resize(img, (w*2, h*2))
+    # img = cv.resize(img, (w*2, h*2))
 
     color_img = img
     img = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
@@ -23,13 +23,13 @@ if __name__ == "__main__":
     FRACCION_MINIMA_PIXELES_NEGROS:float = 3/4
     notas:list = []
     str_notas:str = ""
-    pentagramas, corte_pentagramas, distancia = encontrar_pentagramas(
+    pentagramas, corte_pentagramas, distancia, grosor = encontrar_pentagramas(
         img, UMBRAL_NEGRO, FRACCION_MINIMA_PIXELES_NEGROS)
     image_rectangulos = img
     PUNTOS_MEDIO = []
     for index_pentagrama in range(len(corte_pentagramas)):
         figuras_en_pentagrama = recorrer_pentagrama(
-            img[corte_pentagramas[index_pentagrama][0]: corte_pentagramas[index_pentagrama][-1]], distancia, UMBRAL_NEGRO)
+            img[corte_pentagramas[index_pentagrama][0]: corte_pentagramas[index_pentagrama][-1]], distancia, UMBRAL_NEGRO, grosor)
     
         count = 0
         for figura, posiciones in figuras_en_pentagrama:
@@ -62,7 +62,7 @@ if __name__ == "__main__":
 
     for pent in pentagramas:
         for coord in pent:
-            color_img = cv.circle(color_img, (len(img[0]) - 100, coord), 2, (0,0,255),-1)  
+            color_img = cv.circle(color_img, (len(img[0]) - 80, coord), 2, (0,0,255),-1)  
 
 
     for point in PUNTOS_MEDIO:

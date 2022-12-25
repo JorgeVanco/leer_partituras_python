@@ -1,19 +1,28 @@
-def get_distancia_entre_lineas(distancias: list) -> int:
+def get_distancia_entre_lineas(distancias: list) -> tuple[int, int]:
     '''
     Busca la distancia entre las líneas más común
 
-    Args: distancias (list): Lista de todas las distancias entre las listas
+    Args:
+        distancias (list): Lista de todas las distancias entre las listas
 
-    Returns: distancia (int)
+    Returns: 
+        distancia (int)
+        grosor (int): Grosor líneas pentagrama
 
     '''
     conteo_distancias: dict = {}
+    grosor:int = 1
+    aumentar_grosor: bool = True
     for distancia in distancias:
         if distancia > 1:
             if distancia not in conteo_distancias:
                 conteo_distancias[distancia] = 0
 
             conteo_distancias[distancia] += 1
+            aumentar_grosor = False
+
+        elif distancia == 1 and aumentar_grosor:
+            grosor += 1
 
     if conteo_distancias:
         frecuencias_distancias:list = list(conteo_distancias.values())
@@ -23,7 +32,7 @@ def get_distancia_entre_lineas(distancias: list) -> int:
             if conteo_distancias[cada_distancia] == frecuencia_distancia_mas_comun:
                 distancia:int = cada_distancia
 
-    return distancia
+    return distancia, grosor
 
 
 def lista_pentagramas(lineas:list, distancia:int) -> list:
@@ -143,7 +152,7 @@ def contar_pixeles_negros_en_fila(start: int, row: list, UMBRAL_NEGRO: int) -> i
     return count
 
 
-def encontrar_pentagramas(img: list, UMBRAL_NEGRO: int, FRACCION_MINIMA_PIXELES_NEGROS: float) -> tuple:
+def encontrar_pentagramas(img: list, UMBRAL_NEGRO: int, FRACCION_MINIMA_PIXELES_NEGROS: float) -> tuple[list, list[tuple], int, int]:
     '''
     Args: 
         img (list): imagen a procesar
@@ -179,10 +188,10 @@ def encontrar_pentagramas(img: list, UMBRAL_NEGRO: int, FRACCION_MINIMA_PIXELES_
     # comprobar si se ha acabado el pentagrama mirado las distancias
     # más comunes y mayores que 1(a veces puede coger dos lineas seguidas)
 
-    distancia: int = get_distancia_entre_lineas(distancias)
+    distancia, grosor = get_distancia_entre_lineas(distancias)
 
     pentagramas: list = lista_pentagramas(lineas, distancia)
 
     corte_pentagramas:list[tuple] = get_corte_pentagramas(pentagramas, len(img))
 
-    return pentagramas, corte_pentagramas, distancia
+    return pentagramas, corte_pentagramas, distancia, grosor

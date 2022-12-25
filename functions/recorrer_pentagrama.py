@@ -30,19 +30,30 @@ def agrandar_lado(posiciones_cuadrado:list[int], suma_actual:int, UMBRAL_NEGRO:i
         suma_actual = suma_nueva
     return posiciones_cuadrado, suma_actual
 
-def agrandar_cuadrado(pentagrama:list[list[int]], posiciones_cuadrado:list[int], UMBRAL_NEGRO:int) -> list[int]:
-    AUMENTO_MINIMO:int = 6
+def agrandar_cuadrado(pentagrama:list[list[int]], posiciones_cuadrado:list[int], UMBRAL_NEGRO:int, GROSOR:int) -> list[int]:
+    AUMENTO_MINIMO_LATERALES:int = GROSOR * 5//3#(len(pentagrama)//5) // (posiciones_cuadrado[1] - posiciones_cuadrado[0]) #grosor * 2
+    AUMENTO_MINIMO_ARRIBA_ABAJO:int = GROSOR*3//4
+    print("__________________________________", (len(pentagrama)//5) // (posiciones_cuadrado[1] - posiciones_cuadrado[0]))
+    print(posiciones_cuadrado[1] - posiciones_cuadrado[0], len(pentagrama)//5)
     cuadrado:list[list[int]] = pentagrama[posiciones_cuadrado[0] : posiciones_cuadrado[1], posiciones_cuadrado[2]: posiciones_cuadrado[3]]
     suma_actual:int = (cuadrado < UMBRAL_NEGRO).sum()
 
     # Se agrandan todos los lados, va del 3 al 0 porque si se agranda primero arriba y abajo se supera siempre el AUMENTO_MINIMO
-    for lado in range(3,-1, -1):
+    AUMENTO_MINIMO:int = AUMENTO_MINIMO_LATERALES
+    # AUMENTO_MINIMO:int = AUMENTO_MINIMO_ARRIBA_ABAJO
+    print(GROSOR, AUMENTO_MINIMO)
+    for lado in range(3, -1, -1):
+        if lado == 1:
+            AUMENTO_MINIMO = AUMENTO_MINIMO_ARRIBA_ABAJO
+        # if lado == 2:
+        #     AUMENTO_MINIMO_LATERALES:int = GROSOR * (len(pentagrama)//4) // (posiciones_cuadrado[1] - posiciones_cuadrado[0]) #grosor * 2
+        #     AUMENTO_MINIMO= AUMENTO_MINIMO_LATERALES
         posiciones_cuadrado, suma_actual = agrandar_lado(posiciones_cuadrado, suma_actual, UMBRAL_NEGRO, pentagrama, AUMENTO_MINIMO, lado)
 
     return posiciones_cuadrado
 
 
-def recorrer_pentagrama(pentagrama, distancia:int, UMBRAL_NEGRO:int):
+def recorrer_pentagrama(pentagrama:list, distancia:int, UMBRAL_NEGRO:int, GROSOR:int):
     '''
     Recorre cada pentagrama verticalmente y horizontalmente
     
@@ -60,6 +71,9 @@ def recorrer_pentagrama(pentagrama, distancia:int, UMBRAL_NEGRO:int):
 
     figuras_en_pentagrama = []
 
+    if GROSOR <= 2:
+        GROSOR = 2
+
     while posicion_horizontal < len(pentagrama[0]):
         posicion_vertical = 0
         while posicion_vertical < len(pentagrama):
@@ -68,7 +82,7 @@ def recorrer_pentagrama(pentagrama, distancia:int, UMBRAL_NEGRO:int):
             
             if (cuadrado < UMBRAL_NEGRO).sum() > 0.5*(cuadrado <= 255).sum(): 
                 posiciones = [posicion_vertical, posicion_vertical + distancia, posicion_horizontal,posicion_horizontal + step]
-                posiciones_nuevas = agrandar_cuadrado(pentagrama, posiciones, UMBRAL_NEGRO)
+                posiciones_nuevas = agrandar_cuadrado(pentagrama, posiciones, UMBRAL_NEGRO,GROSOR)
                 cuadrado = pentagrama[posiciones_nuevas[0] : posiciones_nuevas[1], posiciones_nuevas[2]: posiciones_nuevas[3]]
                 posicion_vertical = len(pentagrama)
                 posicion_horizontal = posiciones_nuevas[3]

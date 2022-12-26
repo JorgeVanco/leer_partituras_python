@@ -13,7 +13,7 @@ if __name__ == "__main__":
     if img is None:
         print("Could not read the image.")
     h,w = img.shape[:2]
-    # img = cv.resize(img, (w*2, h*2))
+    #img = cv.resize(img, (w*2, h*2))
 
     color_img = img
     img = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
@@ -32,19 +32,27 @@ if __name__ == "__main__":
             img[corte_pentagramas[index_pentagrama][0]: corte_pentagramas[index_pentagrama][-1]], distancia, UMBRAL_NEGRO, grosor)
     
         count = 0
-        for figura, posiciones in figuras_en_pentagrama:
+        for figura, posiciones, posiciones_rectangulo in figuras_en_pentagrama:
 
             #Sumar desfase por distinto pentagrama
             posiciones[0] = corte_pentagramas[index_pentagrama][0] + posiciones[0]
             posiciones[1] = corte_pentagramas[index_pentagrama][0] + posiciones[1]
 
+            posiciones_rectangulo[0] = corte_pentagramas[index_pentagrama][0] + posiciones_rectangulo[0]
+            posiciones_rectangulo[1] = corte_pentagramas[index_pentagrama][0] + posiciones_rectangulo[1]
+
 
 
             start_point:tuple[int] = (posiciones[2], posiciones[0])
             end_point:tuple[int] = (posiciones[3], posiciones[1])
+
+            start_point_rectangulo:tuple[int] = (posiciones_rectangulo[2], posiciones_rectangulo[0])
+            end_point_rectangulo:tuple[int] = (posiciones_rectangulo[3], posiciones_rectangulo[1])
+
             color:tuple[int] = 0
             thickness:int = 1
             image_rectangulos = cv.rectangle(image_rectangulos, start_point, end_point, color, thickness)
+            image_rectangulos = cv.rectangle(image_rectangulos, start_point_rectangulo, end_point_rectangulo, color, thickness)
             nota = diferenciar_figuras(
                 figura, posiciones, pentagramas[index_pentagrama], distancia)  # pentagramas
             notas.append(nota)
@@ -52,7 +60,6 @@ if __name__ == "__main__":
             PUNTOS_MEDIO.append(( posiciones[2], punto_medio))
             str_notas += nota["nota"] + " "
             org = (posiciones[2] + (abs(posiciones[3] - posiciones[2])) // 2, corte_pentagramas[index_pentagrama][-1] - 20*(count%2)-5)
-            print(org)
             if nota["nota"] != "otra figura":
                 image_rectangulos = cv.putText(image_rectangulos, nota["nota"], org, cv.FONT_HERSHEY_SIMPLEX, 0.35, 0, 1, cv.LINE_AA)
             count += 1
@@ -84,7 +91,7 @@ if __name__ == "__main__":
     with open(f"./notas_partituras/notas_pruebas.txt", "w") as fh:
         fh.write(str(notas))
         fh.write(str_notas)
-    print(str_notas)
+
     k = cv.waitKey(0)
 
 

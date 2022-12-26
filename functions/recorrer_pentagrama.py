@@ -1,5 +1,5 @@
 
-def agrandar_lado(posiciones_cuadrado:list[int], suma_actual:int, UMBRAL_NEGRO:int, pentagrama:list[list[int]], AUMENTO_MINIMO:int, lado:int) -> tuple[list[int], int]:
+def agrandar_lado(posiciones_cuadrado:list[int], suma_actual:int, UMBRAL_NEGRO:int, pentagrama:list[list[int]], AUMENTO_MINIMO:int, AUMENTO_MINIMO_LATERALES:int, lado:int) -> tuple[list[int], list[int], int]:
     """
     Agranda un lado del cuadrado de la figura hasta que el número de píxeles negros que aumentan no superan el umbral de AUMENTO_MINIMO
 
@@ -17,43 +17,48 @@ def agrandar_lado(posiciones_cuadrado:list[int], suma_actual:int, UMBRAL_NEGRO:i
     """
 
     cantidad_a_sumar:int = (-1)**lado
+    posiciones_rectangulo:list = posiciones_cuadrado.copy()
 
     agrandar_lado:bool = True
+    fijado_cuadrado:bool = False
     while agrandar_lado:
-        posiciones_cuadrado[lado] -= cantidad_a_sumar
-        nuevo_cuadrado = pentagrama[posiciones_cuadrado[0] : posiciones_cuadrado[1], posiciones_cuadrado[2]: posiciones_cuadrado[3]]
+        posiciones_rectangulo[lado] -= cantidad_a_sumar
+        nuevo_cuadrado = pentagrama[posiciones_rectangulo[0] : posiciones_rectangulo[1], posiciones_rectangulo[2]: posiciones_rectangulo[3]]
         # comparar con cuadrado anterior y ver si es mayor
         suma_nueva = (nuevo_cuadrado < UMBRAL_NEGRO).sum()
+        if not fijado_cuadrado and suma_nueva - suma_actual < AUMENTO_MINIMO_LATERALES:
+            posiciones_cuadrado = posiciones_rectangulo.copy()
+            posiciones_cuadrado[lado] += cantidad_a_sumar
+            fijado_cuadrado = True
         if suma_nueva - suma_actual < AUMENTO_MINIMO:
             agrandar_lado = False
-            posiciones_cuadrado[lado] += cantidad_a_sumar
+            posiciones_rectangulo[lado] += cantidad_a_sumar
+            
         suma_actual = suma_nueva
-    return posiciones_cuadrado, suma_actual
+    return posiciones_cuadrado, posiciones_rectangulo, suma_actual
 
-def agrandar_cuadrado(pentagrama:list[list[int]], posiciones_cuadrado:list[int], UMBRAL_NEGRO:int, GROSOR:int) -> list[int]:
-    AUMENTO_MINIMO_LATERALES:int = GROSOR * 5//3#(len(pentagrama)//5) // (posiciones_cuadrado[1] - posiciones_cuadrado[0]) #grosor * 2
-    AUMENTO_MINIMO_ARRIBA_ABAJO:int = GROSOR*3//4
-    print("__________________________________", (len(pentagrama)//5) // (posiciones_cuadrado[1] - posiciones_cuadrado[0]))
-    print(posiciones_cuadrado[1] - posiciones_cuadrado[0], len(pentagrama)//5)
+def agrandar_cuadrado(pentagrama:list[list[int]], posiciones_cuadrado:list[int], UMBRAL_NEGRO:int, GROSOR:int, AUMENTO_MINIMO_LATERALES:int, AUMENTO_MINIMO_ARRIBA_ABAJO:int) -> tuple[list[int], list[int]]:
+    
+    # print("__________________________________", (len(pentagrama)//5) // (posiciones_cuadrado[1] - posiciones_cuadrado[0]))
+    # print(posiciones_cuadrado[1] - posiciones_cuadrado[0], len(pentagrama)//5)
     cuadrado:list[list[int]] = pentagrama[posiciones_cuadrado[0] : posiciones_cuadrado[1], posiciones_cuadrado[2]: posiciones_cuadrado[3]]
     suma_actual:int = (cuadrado < UMBRAL_NEGRO).sum()
 
     # Se agrandan todos los lados, va del 3 al 0 porque si se agranda primero arriba y abajo se supera siempre el AUMENTO_MINIMO
     AUMENTO_MINIMO:int = AUMENTO_MINIMO_LATERALES
     # AUMENTO_MINIMO:int = AUMENTO_MINIMO_ARRIBA_ABAJO
-    print(GROSOR, AUMENTO_MINIMO)
     for lado in range(3, -1, -1):
         if lado == 1:
             AUMENTO_MINIMO = AUMENTO_MINIMO_ARRIBA_ABAJO
         # if lado == 2:
         #     AUMENTO_MINIMO_LATERALES:int = GROSOR * (len(pentagrama)//4) // (posiciones_cuadrado[1] - posiciones_cuadrado[0]) #grosor * 2
         #     AUMENTO_MINIMO= AUMENTO_MINIMO_LATERALES
-        posiciones_cuadrado, suma_actual = agrandar_lado(posiciones_cuadrado, suma_actual, UMBRAL_NEGRO, pentagrama, AUMENTO_MINIMO, lado)
+        posiciones_cuadrado, posiciones_rectangulo, suma_actual = agrandar_lado(posiciones_cuadrado, suma_actual, UMBRAL_NEGRO, pentagrama, AUMENTO_MINIMO, AUMENTO_MINIMO_LATERALES, lado)
 
-    return posiciones_cuadrado
+    return posiciones_cuadrado, posiciones_rectangulo
 
 
-def recorrer_pentagrama(pentagrama:list, distancia:int, UMBRAL_NEGRO:int, GROSOR:int):
+def recorrer_pentagrama(pentagrama:list, distancia:int, UMBRAL_NEGRO:int, GROSOR:int) -> list[tuple]:
     '''
     Recorre cada pentagrama verticalmente y horizontalmente
     
@@ -74,6 +79,11 @@ def recorrer_pentagrama(pentagrama:list, distancia:int, UMBRAL_NEGRO:int, GROSOR
     if GROSOR <= 2:
         GROSOR = 2
 
+
+    AUMENTO_MINIMO_LATERALES:int = GROSOR * 7//4#(len(pentagrama)//5) // (posiciones_cuadrado[1] - posiciones_cuadrado[0]) #grosor * 2
+    AUMENTO_MINIMO_ARRIBA_ABAJO:int = GROSOR*3//5
+
+
     while posicion_horizontal < len(pentagrama[0]):
         posicion_vertical = 0
         while posicion_vertical < len(pentagrama):
@@ -82,11 +92,11 @@ def recorrer_pentagrama(pentagrama:list, distancia:int, UMBRAL_NEGRO:int, GROSOR
             
             if (cuadrado < UMBRAL_NEGRO).sum() > 0.5*(cuadrado <= 255).sum(): 
                 posiciones = [posicion_vertical, posicion_vertical + distancia, posicion_horizontal,posicion_horizontal + step]
-                posiciones_nuevas = agrandar_cuadrado(pentagrama, posiciones, UMBRAL_NEGRO,GROSOR)
+                posiciones_nuevas, posciiones_rectangulo = agrandar_cuadrado(pentagrama, posiciones, UMBRAL_NEGRO,GROSOR, AUMENTO_MINIMO_LATERALES, AUMENTO_MINIMO_ARRIBA_ABAJO)  
                 cuadrado = pentagrama[posiciones_nuevas[0] : posiciones_nuevas[1], posiciones_nuevas[2]: posiciones_nuevas[3]]
                 posicion_vertical = len(pentagrama)
                 posicion_horizontal = posiciones_nuevas[3]
-                figuras_en_pentagrama.append((cuadrado, posiciones_nuevas)) # tupla con el cuadrado y sus posiciones
+                figuras_en_pentagrama.append((cuadrado, posiciones_nuevas, posciiones_rectangulo)) # tupla con el cuadrado y sus posiciones
 
             posicion_vertical += distancia//2  # Es la mitad porque tiene que recorrer
         posicion_horizontal += step

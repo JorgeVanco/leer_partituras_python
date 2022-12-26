@@ -38,7 +38,7 @@ def encontrar_menor_distancia(punto_medio:int, rows_pentagrama:int) -> tuple[int
         distancia_punto_medio_actual = get_distancia(
             punto_medio, punto_actual_del_pentagrama)
 
-        if menor_distancia and distancia_punto_medio_actual > menor_distancia:
+        if menor_distancia != None and distancia_punto_medio_actual > menor_distancia:
             index_row = 11
         else:
             menor_distancia = distancia_punto_medio_actual
@@ -51,9 +51,8 @@ def encontrar_menor_distancia(punto_medio:int, rows_pentagrama:int) -> tuple[int
 def encontrar_posicion_en_pentagrama(punto_medio:float, rows_pentagrama:int, distancia:int) -> int:
     menor_distancia, row_menor_distancia = encontrar_menor_distancia(
         punto_medio, rows_pentagrama)
-
     # ver si es mayor la distancia que la (distancia entre pentagramas) /2 para saber la nota adecuada si sale por encima o por debajo del pentagrama
-    if menor_distancia >= distancia / 2 - distancia/4:
+    if menor_distancia >= distancia / 4: #distancia / 2 - distancia / 4:
         if row_menor_distancia == 1:
             row_menor_distancia -= menor_distancia // (distancia / 2)
         elif row_menor_distancia == 9:
@@ -72,15 +71,13 @@ def diferenciar_figuras(figura, posiciones, rows_pentagrama, distancia) -> dict:
     if  altura >= altura_pentagrama:
         # se quita las claves de sol, el tiempo, las lineas verticales
         if posiciones[3] - posiciones[2] > 1/3 * altura:
-            # cv.imshow("clave de sol"+str(posiciones), figura)
-            print("Clave de SOl", posiciones)
+
             cv.waitKey(0)
             return {"nota" : "clave de sol"}   # habria que diferencia entre clave de sol, de fa, ...
 
         return {"nota" : "otra figura"} 
     elif altura >= 0.5 * (altura_pentagrama):
-        print("Posible silencio")
-        # cv.imshow("silencio" + " "+str(posiciones), figura)
+
 
         return {"nota" : "silencio"}
     punto_medio = posiciones[0] + (posiciones[1] - posiciones[0]) / 2
@@ -89,9 +86,7 @@ def diferenciar_figuras(figura, posiciones, rows_pentagrama, distancia) -> dict:
         punto_medio, rows_pentagrama, distancia)
     octava_alta = 11 - index_row_pentagrama >= 7
     octava_baja = 11 - index_row_pentagrama < 0
-    # cv.imshow(NOTAS_MUSICALES[(11-index_row_pentagrama) %
-    #         7] + " "+str(posiciones), figura)
-    print(NOTAS_MUSICALES[(11-index_row_pentagrama) % 7])
+
     return {"nota": NOTAS_MUSICALES[(11-index_row_pentagrama) % 7],
             "octava_alta": octava_alta,
             "octava_baja": octava_baja}

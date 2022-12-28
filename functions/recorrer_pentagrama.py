@@ -62,7 +62,8 @@ def recorrer_pentagrama(pentagrama:list, distancia:int, UMBRAL_NEGRO:int, GROSOR
     '''
     Recorre cada pentagrama verticalmente y horizontalmente
     
-    Args: pentagrama (list)
+    Args: 
+        pentagrama (list)
         distancia (int): Distancia entre dos líneas del pentagrama
         UMBRAL_NEGRO (int)
 
@@ -90,7 +91,7 @@ def recorrer_pentagrama(pentagrama:list, distancia:int, UMBRAL_NEGRO:int, GROSOR
 
             cuadrado = pentagrama[posicion_vertical:posicion_vertical + distancia, posicion_horizontal:posicion_horizontal + step]
             
-            if (cuadrado < UMBRAL_NEGRO).sum() > 0.5*(cuadrado <= 255).sum(): 
+            if len(cuadrado) == distancia and (cuadrado < UMBRAL_NEGRO).sum() > 0.5*(cuadrado <= 255).sum(): 
                 posiciones = [posicion_vertical, posicion_vertical + distancia, posicion_horizontal,posicion_horizontal + step]
                 posiciones_nuevas, posciiones_rectangulo = agrandar_cuadrado(pentagrama, posiciones, UMBRAL_NEGRO,GROSOR, AUMENTO_MINIMO_LATERALES, AUMENTO_MINIMO_ARRIBA_ABAJO)  
                 cuadrado = pentagrama[posiciones_nuevas[0] : posiciones_nuevas[1], posiciones_nuevas[2]: posiciones_nuevas[3]]

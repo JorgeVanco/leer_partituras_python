@@ -28,7 +28,6 @@ if __name__ == "__main__":
     image_rectangulos = img
     PUNTOS_MEDIO = []
     for index_pentagrama in range(len(corte_pentagramas)):
-        cv.imshow(str(index_pentagrama), img[corte_pentagramas[index_pentagrama][0]: corte_pentagramas[index_pentagrama][-1]])
 
         if pentagramas[index_pentagrama][0] - corte_pentagramas[index_pentagrama][0] > 6 * distancia:
             imagen_para_recorrer = img[pentagramas[index_pentagrama][0] - 6*distancia: corte_pentagramas[index_pentagrama][-1]]

@@ -23,6 +23,7 @@ if __name__ == "__main__":
     FRACCION_MINIMA_PIXELES_NEGROS:float = 3/4
     notas:list = []
     str_notas:str = ""
+    str_long_notas:str = ""
     pentagramas, corte_pentagramas, distancia, grosor = encontrar_pentagramas(
         img, UMBRAL_NEGRO, FRACCION_MINIMA_PIXELES_NEGROS)
     image_rectangulos = img
@@ -36,7 +37,7 @@ if __name__ == "__main__":
             imagen_para_recorrer = img[corte_pentagramas[index_pentagrama][0]: corte_pentagramas[index_pentagrama][-1]]
             desfase = corte_pentagramas[index_pentagrama][0]
 
-        figuras_en_pentagrama = recorrer_pentagrama(
+        figuras_en_pentagrama, longitudes_notas = recorrer_pentagrama(
             imagen_para_recorrer, distancia, UMBRAL_NEGRO, grosor)
 
         count = 0
@@ -60,16 +61,28 @@ if __name__ == "__main__":
             thickness:int = 1
             image_rectangulos = cv.rectangle(image_rectangulos, start_point, end_point, color, thickness)
             image_rectangulos = cv.rectangle(image_rectangulos, start_point_rectangulo, end_point_rectangulo, color, thickness)
+
             nota = diferenciar_figuras(
                 figura, posiciones, pentagramas[index_pentagrama], distancia)  # pentagramas
+
+            if count + 1 >= len(longitudes_notas):
+                nota["longitud"] = None
+            else:
+                nota["longitud"] = longitudes_notas[count + 1] / (pentagramas[index_pentagrama][-1] - pentagramas[index_pentagrama][0]) // 0.25 / 2
+
             notas.append(nota)
+
             punto_medio = posiciones[0] + (posiciones[1] - posiciones[0]) // 2
             PUNTOS_MEDIO.append(( posiciones[2], punto_medio))
             str_notas += nota["nota"] + " "
+            str_long_notas += str(nota["longitud"]) + " "
             org = (posiciones[2] + (abs(posiciones[3] - posiciones[2])) // 2, corte_pentagramas[index_pentagrama][-1] - 20*(count%2)-5)
             if nota["nota"] != "otra figura":
                 image_rectangulos = cv.putText(image_rectangulos, nota["nota"], org, cv.FONT_HERSHEY_SIMPLEX, 0.35, 0, 1, cv.LINE_AA)
+            
             count += 1
+
+
         start_point = (0, pentagramas[index_pentagrama][0])
         end_point = (len(img[0]), pentagramas[index_pentagrama][-1])
         image_rectangulos = cv.rectangle(image_rectangulos, start_point, end_point, color, thickness)
@@ -86,7 +99,6 @@ if __name__ == "__main__":
     cv.imshow("COLOR", color_img)
 
 
-
     # mejor guardarlo en un json
     # (h, w) = image_rectangulos.shape[:2]
     # percentage = 960 / w
@@ -98,6 +110,9 @@ if __name__ == "__main__":
     with open(f"./notas_partituras/notas_pruebas.txt", "w") as fh:
         fh.write(str(notas))
         fh.write(str_notas)
+
+    with open(f"./notas_partituras/long_notas.txt", "w") as fh:
+        fh.write(str_long_notas)
 
     k = cv.waitKey(0)
 

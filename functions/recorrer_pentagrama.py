@@ -58,7 +58,7 @@ def agrandar_cuadrado(pentagrama:list[list[int]], posiciones_cuadrado:list[int],
     return posiciones_cuadrado, posiciones_rectangulo
 
 
-def recorrer_pentagrama(pentagrama:list, distancia:int, UMBRAL_NEGRO:int, GROSOR:int) -> list[tuple]:
+def recorrer_pentagrama(pentagrama:list, distancia:int, UMBRAL_NEGRO:int, GROSOR:int) -> tuple[list[tuple], list[int]]:
     '''
     Recorre cada pentagrama verticalmente y horizontalmente
     
@@ -74,6 +74,7 @@ def recorrer_pentagrama(pentagrama:list, distancia:int, UMBRAL_NEGRO:int, GROSOR
     
     posicion_horizontal:int = 0
     step:int = distancia * 4//3
+    longitudes_notas:list[int] = []
 
     figuras_en_pentagrama = []
 
@@ -83,7 +84,7 @@ def recorrer_pentagrama(pentagrama:list, distancia:int, UMBRAL_NEGRO:int, GROSOR
 
     AUMENTO_MINIMO_LATERALES:int = GROSOR * 7//4#(len(pentagrama)//5) // (posiciones_cuadrado[1] - posiciones_cuadrado[0]) #grosor * 2
     AUMENTO_MINIMO_ARRIBA_ABAJO:int = GROSOR*3//5
-
+    posicion_anterior = 0
 
     while posicion_horizontal < len(pentagrama[0]):
         posicion_vertical = 0
@@ -93,12 +94,16 @@ def recorrer_pentagrama(pentagrama:list, distancia:int, UMBRAL_NEGRO:int, GROSOR
             
             if len(cuadrado) == distancia and (cuadrado < UMBRAL_NEGRO).sum() > 0.4*(cuadrado <= 255).sum(): 
                 posiciones = [posicion_vertical, posicion_vertical + distancia, posicion_horizontal,posicion_horizontal + step]
-                posiciones_nuevas, posciiones_rectangulo = agrandar_cuadrado(pentagrama, posiciones, UMBRAL_NEGRO,GROSOR, AUMENTO_MINIMO_LATERALES, AUMENTO_MINIMO_ARRIBA_ABAJO)  
+                posiciones_nuevas, posciones_rectangulo = agrandar_cuadrado(pentagrama, posiciones, UMBRAL_NEGRO,GROSOR, AUMENTO_MINIMO_LATERALES, AUMENTO_MINIMO_ARRIBA_ABAJO)  
                 cuadrado = pentagrama[posiciones_nuevas[0] : posiciones_nuevas[1], posiciones_nuevas[2]: posiciones_nuevas[3]]
                 posicion_vertical = len(pentagrama)
                 posicion_horizontal = posiciones_nuevas[3]
-                figuras_en_pentagrama.append((cuadrado, posiciones_nuevas, posciiones_rectangulo)) # tupla con el cuadrado y sus posiciones
+                distancia_entre_notas = posiciones_nuevas[2] - posicion_anterior
+                longitudes_notas.append(distancia_entre_notas)
+                figuras_en_pentagrama.append((cuadrado, posiciones_nuevas, posciones_rectangulo)) # tupla con el cuadrado y sus posiciones
+                posicion_anterior = posicion_horizontal
 
+                
             posicion_vertical += distancia//2  # Es la mitad porque tiene que recorrer
         posicion_horizontal += step
-    return figuras_en_pentagrama
+    return figuras_en_pentagrama, longitudes_notas

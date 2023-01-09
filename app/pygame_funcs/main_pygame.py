@@ -3,7 +3,7 @@ import pygame
 import pygame_gui
 from pygame_funcs.pop_up import pop_up as pop
 from Classes.Notas import Partitura
-from lectura_partituras.functions.functions import find_complete_path, get_nombre_fichero
+from lectura_partituras.functions.functions import find_complete_path, get_nombre_fichero, resize_image
 import os
 import cv2 as cv
 
@@ -21,8 +21,8 @@ def actualizar_partitura(partitura:Partitura, PATH:str, complete_path:str):
                     image_rectangulos, nota.nota + " " + str(nota.figura), org, cv.FONT_HERSHEY_SIMPLEX, 0.35, 0, 1, cv.LINE_AA)
             count += 1
 
-    cv.imwrite(complete_path + "app/pygame_funcs/imagen_partitura_modificada.png", image_rectangulos)
-    return pygame.image.load(complete_path + "app/pygame_funcs/imagen_partitura_modificada.png")
+    cv.imwrite(complete_path + "app/pygame_funcs/imagenes_editadas/imagen_partitura_modificada.png", image_rectangulos)
+    return pygame.image.load(complete_path + "app/pygame_funcs/imagenes_editadas/imagen_partitura_modificada.png")
 
 
 
@@ -38,14 +38,23 @@ def main_pygame():
     manager = pygame_gui.UIManager((800, 600))
 
     with open(complete_path + "app/pygame_funcs/partes_imagenes.obj", "rb") as fh:
-        img = pickle.load(fh)
         notas = pickle.load(fh)
         posiciones_pentagramas = pickle.load(fh)
         PATH = pickle.load(fh)
+        resized = pickle.load(fh)
+        fraccion = pickle.load(fh)
 
     
 
     img = pygame.image.load(PATH)
+
+    if resized:
+        img = cv.imread(PATH)
+        img = resize_image(fraccion, img)
+        cv.imwrite(complete_path+"app/pygame_funcs/imagen_resized.png", img)
+        PATH = complete_path + "app/pygame_funcs/imagen_resized.png"
+        img = pygame.image.load(complete_path+"app/pygame_funcs/imagen_resized.png")
+        
 
     w, h = img.get_size()
 
@@ -56,7 +65,6 @@ def main_pygame():
 
     rect = img.get_rect()
     rect.center = w//2, h//2
-    moving = False
 
 
     partitura = Partitura(posiciones_pentagramas, notas)
@@ -122,7 +130,10 @@ def main_pygame():
         pickle.dump(partitura.notas, fh)
 
     NOMBRE_IMAGEN = get_nombre_fichero(PATH)
-    pygame.image.save(img, complete_path + "app/pygame_funcs/" + NOMBRE_IMAGEN)
-    os.remove(complete_path + "app/pygame_funcs/imagen_partitura_modificada.png")
+    pygame.image.save(img, complete_path + "app/pygame_funcs/imagenes_editadas/" + NOMBRE_IMAGEN)
+    os.remove(complete_path + "app/pygame_funcs/imagenes_editadas/imagen_partitura_modificada.png")
+
+    if resized:
+        os.remove(complete_path+"app/pygame_funcs/imagen_resized.png")
 
     return True

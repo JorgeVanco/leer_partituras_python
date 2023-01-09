@@ -46,7 +46,7 @@ def agrandar_lado(posiciones_cuadrado:list[int], suma_actual:int, UMBRAL_NEGRO:i
         suma_actual = suma_nueva
     return posiciones_cuadrado, posiciones_rectangulo, suma_actual
 
-def agrandar_cuadrado(pentagrama:list[list[int]], posiciones_cuadrado:list[int], UMBRAL_NEGRO:int, GROSOR:int, AUMENTO_MINIMO_LATERALES:int, AUMENTO_MINIMO_ARRIBA_ABAJO:int, posiciones_pentagrama:list, partitura_fina:bool) -> tuple[list[int], list[int]]:
+def agrandar_cuadrado(pentagrama:list[list[int]], posiciones_cuadrado:list[int], UMBRAL_NEGRO:int, GROSOR:int, AUMENTO_MINIMO_LATERALES:int, AUMENTO_MINIMO_ARRIBA_ABAJO:int, posiciones_pentagrama:list, partitura_fina:bool, DETECTAR_CORCHEAS:bool) -> tuple[list[int], list[int]]:
     cuadrado:list[list[int]] = pentagrama[posiciones_cuadrado[0] : posiciones_cuadrado[1], posiciones_cuadrado[2]: posiciones_cuadrado[3]]
     suma_actual:int = (cuadrado < UMBRAL_NEGRO).sum()
     # AUMENTO_MINIMO_LATERALES = GROSOR * (posiciones_cuadrado[1] - posiciones_cuadrado[0]) // (posiciones_pentagrama[-1] - posiciones_pentagrama[0]//5) * 7//4
@@ -58,16 +58,16 @@ def agrandar_cuadrado(pentagrama:list[list[int]], posiciones_cuadrado:list[int],
             AUMENTO_MINIMO = AUMENTO_MINIMO_ARRIBA_ABAJO
         posiciones_cuadrado, posiciones_rectangulo, suma_actual = agrandar_lado(posiciones_cuadrado, suma_actual, UMBRAL_NEGRO, pentagrama, AUMENTO_MINIMO, AUMENTO_MINIMO_LATERALES, lado)
 
-    # if not partitura_fina :#and not posiciones_cuadrado[-1] - posiciones_cuadrado[0] > 0.8*(posiciones_pentagrama[-1] - posiciones_pentagrama[0]):
-    #     AUMENTO_MINIMO_LATERALES = GROSOR * (posiciones_rectangulo[1] - posiciones_rectangulo[0]) // ((posiciones_pentagrama[-1] - posiciones_pentagrama[0] )/ 5) 
+    if not partitura_fina and DETECTAR_CORCHEAS:#and not posiciones_cuadrado[-1] - posiciones_cuadrado[0] > 0.8*(posiciones_pentagrama[-1] - posiciones_pentagrama[0]):
+        AUMENTO_MINIMO_LATERALES = GROSOR * (posiciones_rectangulo[1] - posiciones_rectangulo[0]) // ((posiciones_pentagrama[-1] - posiciones_pentagrama[0] )/ 5) 
         
-    #     posiciones_cuadrado, posiciones_rectangulo, suma_actual = agrandar_lado(posiciones_cuadrado, suma_actual, UMBRAL_NEGRO, pentagrama, AUMENTO_MINIMO_LATERALES, AUMENTO_MINIMO_LATERALES, 3, posiciones_rectangulo, fijado_cuadrado= True)
-    #     posiciones_cuadrado, posiciones_rectangulo, suma_actual = agrandar_lado(posiciones_cuadrado, suma_actual, UMBRAL_NEGRO, pentagrama, AUMENTO_MINIMO_LATERALES, AUMENTO_MINIMO_LATERALES, 2, posiciones_rectangulo, fijado_cuadrado= True)
+        posiciones_cuadrado, posiciones_rectangulo, suma_actual = agrandar_lado(posiciones_cuadrado, suma_actual, UMBRAL_NEGRO, pentagrama, AUMENTO_MINIMO_LATERALES, AUMENTO_MINIMO_LATERALES, 3, posiciones_rectangulo, fijado_cuadrado= True)
+        posiciones_cuadrado, posiciones_rectangulo, suma_actual = agrandar_lado(posiciones_cuadrado, suma_actual, UMBRAL_NEGRO, pentagrama, AUMENTO_MINIMO_LATERALES, AUMENTO_MINIMO_LATERALES, 2, posiciones_rectangulo, fijado_cuadrado= True)
 
     return posiciones_cuadrado, posiciones_rectangulo
 
 
-def recorrer_pentagrama(pentagrama:list, distancia:int, UMBRAL_NEGRO:int, GROSOR:int, posiciones_pentagrama:list[int,int], partitura_fina:bool) -> list[tuple]:
+def recorrer_pentagrama(pentagrama:list, distancia:int, UMBRAL_NEGRO:int, GROSOR:int, posiciones_pentagrama:list[int,int], partitura_fina:bool, DETECTAR_CORCHEAS: bool) -> list[tuple]:
     '''
     Recorre cada pentagrama verticalmente y horizontalmente
     
@@ -101,7 +101,7 @@ def recorrer_pentagrama(pentagrama:list, distancia:int, UMBRAL_NEGRO:int, GROSOR
             
             if len(cuadrado) == distancia and (cuadrado < UMBRAL_NEGRO).sum() > 0.4*(cuadrado <= 255).sum(): 
                 posiciones = [posicion_vertical, posicion_vertical + distancia, posicion_horizontal,posicion_horizontal + step]
-                posiciones_nuevas, posciiones_rectangulo = agrandar_cuadrado(pentagrama, posiciones, UMBRAL_NEGRO, GROSOR, AUMENTO_MINIMO_LATERALES, AUMENTO_MINIMO_ARRIBA_ABAJO, posiciones_pentagrama, partitura_fina)  
+                posiciones_nuevas, posciiones_rectangulo = agrandar_cuadrado(pentagrama, posiciones, UMBRAL_NEGRO, GROSOR, AUMENTO_MINIMO_LATERALES, AUMENTO_MINIMO_ARRIBA_ABAJO, posiciones_pentagrama, partitura_fina, DETECTAR_CORCHEAS)  
                 cuadrado = pentagrama[posiciones_nuevas[0] : posiciones_nuevas[1], posiciones_nuevas[2]: posiciones_nuevas[3]]
                 posicion_vertical = len(pentagrama)
                 posicion_horizontal = posiciones_nuevas[3]

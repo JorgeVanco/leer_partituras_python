@@ -5,9 +5,11 @@ import pickle
 import numpy as np
 from lectura_partituras.functions.functions import find_complete_path
 
-def set_difficulty(value, difficulty):
-    # Do the job here !
-    pass
+def set_corcheas(value, boolean, AJUSTES):
+    AJUSTES.DETECTAR_CORCHEAS = boolean
+
+def set_resize(value, boolean, AJUSTES):
+    AJUSTES.CAMBIAR_SIZE = boolean
 
 def set_umbral(value, AJUSTES, menu, screen):
     AJUSTES.UMBRAL_NEGRO = int(value)
@@ -38,8 +40,9 @@ def return_to_default_settings(AJUSTES, AJUSTES_DEFAULT, menu, screen, complete_
 def draw_menu(menu, screen, AJUSTES, AJUSTES_DEFAULT, complete_path):
     menu.clear()
     menu.add.range_slider("Umbral negro: "+str(AJUSTES.UMBRAL_NEGRO), default=AJUSTES.UMBRAL_NEGRO, range_values=(0, 255), increment=1, onchange = lambda value:set_umbral(value, AJUSTES, menu, screen))
-    menu.add.range_slider("Fracción mínima pixeles negros: "+str(AJUSTES.FRACCION_MINIMA_PIXELES_NEGROS), default=AJUSTES.FRACCION_MINIMA_PIXELES_NEGROS, range_values=(0, 1), increment=0.1, onchange = lambda value:set_fraccion(value, AJUSTES))
-    menu.add.selector('Detectar corcheas :', [('Sí', 1), ('No', 2)], onchange=set_difficulty)
+    menu.add.range_slider("Fracción mínima pixeles negros: "+str(AJUSTES.FRACCION_MINIMA_PIXELES_NEGROS) + " ", default=AJUSTES.FRACCION_MINIMA_PIXELES_NEGROS, range_values=(0, 1), increment=0.1, onchange = lambda value:set_fraccion(value, AJUSTES))
+    menu.add.selector('Detectar corcheas :'+str(AJUSTES.DETECTAR_CORCHEAS), [('No', False), ('Sí', True)], default=AJUSTES.DETECTAR_CORCHEAS, onchange= lambda value, boolean: set_corcheas(value, boolean, AJUSTES))
+    menu.add.selector('Cambiar tamaño partitura :'+str(AJUSTES.CAMBIAR_SIZE), [('No', False), ('Sí', True)], default=AJUSTES.CAMBIAR_SIZE, onchange= lambda value, boolean: set_resize(value, boolean, AJUSTES))
     menu.add.button("Default settings", lambda: return_to_default_settings(AJUSTES, AJUSTES_DEFAULT, menu, screen, complete_path))
     menu.add.button('Save', lambda: save(AJUSTES, AJUSTES_DEFAULT, menu, screen, complete_path))
     menu.add.button('Quit', lambda: quit(menu))
@@ -70,6 +73,4 @@ def main_ajustes():
 
     menu.mainloop(screen)
     
-    
-
     return True

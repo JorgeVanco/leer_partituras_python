@@ -10,7 +10,7 @@ def get_distancia(punto_medio:int, row:int) -> int:
     Calcula la distancia desde el punto medio de la figura a la fila
 
     Args: 
-        punto_medio (int): El punto medio de la figura
+        punto_medio (int): El punto medio del cuadrado que contiene a la figura
         row (int): La fila en la que nos encontramos, es la fila de la línea del pentagrama
     
     Returns:
@@ -19,9 +19,17 @@ def get_distancia(punto_medio:int, row:int) -> int:
     return abs(row - punto_medio)
 
 
-def encontrar_menor_distancia(punto_medio:int, rows_pentagrama:int) -> tuple[int]:
+def encontrar_menor_distancia(punto_medio:float, rows_pentagrama:list[int]) -> tuple[int]:
     """
+    Encuentra la menor distancia desde el punto medio a una de las líneas del pentagrama o el punto medio entre ellas
+
+    Args:
+        punto_medio (float): El punto medio del cuadrado que contiene a la figura
+        rows_pentagrama (list): Lista con las posiciones de las líneas del pentagrama
     
+    Returns:
+        menor_distancia (int): La menor distancia entre el punto medio y una de las líneas del pentagrama o el punto medio entre ellas
+        row_menor_distancia (int): La fila del pentagrama a la cual más cerca se encuentra el punto
     """
     menor_distancia:int = None
     row_menor_distancia:int = 0
@@ -53,6 +61,17 @@ def encontrar_menor_distancia(punto_medio:int, rows_pentagrama:int) -> tuple[int
 
 # medir las distancias a las distintas filas(con el la mitad entre ellas tambien)
 def encontrar_posicion_en_pentagrama(punto_medio:float, rows_pentagrama:int, distancia:int) -> int:
+    """
+    Encuentra la posición de la nota en el pentagrama
+
+    Args:
+        punto_medio (float): El punto medio del cuadrado que contiene a la figura
+        rows_pentagrama (list): Lista con las posiciones de las líneas del pentagrama
+        distancia (int): La distancia entre las líneas del pentagrama
+
+    Returns:
+        row_menor_distancia (int): La fila del pentagrama a la cual más cerca se encuentra el punto
+    """
     menor_distancia, row_menor_distancia = encontrar_menor_distancia(
         punto_medio, rows_pentagrama)
     # ver si es mayor la distancia que la (distancia entre pentagramas) /2 para saber la nota adecuada si sale por encima o por debajo del pentagrama
@@ -64,19 +83,51 @@ def encontrar_posicion_en_pentagrama(punto_medio:float, rows_pentagrama:int, dis
     return row_menor_distancia
 
 def diferenciar_blanca_redonda(posiciones_cuadrado:list[int], posiciones_rectangulo:list[int]) -> str:
+    """
+    Diferencia entre blanca y redonda
+
+    Args:
+        posiciones_cuadrado (list): Las posiciones del cuadrado que contiene a la nota
+        posiciones_rectangulo (list): Las posiciones del rectángulo que contiene a la nota y al cuadrado
+
+    Returns:
+        "redonda" si es redonda
+        "blanca" si es blanca
+    """
     is_blanca = abs(posiciones_rectangulo[1] - posiciones_rectangulo[0]) > 1.5*abs(posiciones_cuadrado[1] - posiciones_cuadrado[0])
     if is_blanca:
         return "blanca"
     return "redonda"
 
-def diferenciar_entre_figuras_negras(posiciones_cuadrado:list[int], posiciones_rectangulo:list[int], pentagrama:list, numero_pixeles_negros:int, UMBRAL_NEGRO):
+def diferenciar_entre_figuras_negras(posiciones_cuadrado:list[int], posiciones_rectangulo:list[int]) -> str:
+    """
+    Diferencia entre negra y corchea
+
+    Args:
+        posiciones_cuadrado (list): Las posiciones del cuadrado que contiene a la nota
+        posiciones_rectangulo (list): Las posiciones del rectángulo que contiene a la nota y al cuadrado
+
+    Returns:
+        "negra" si es negra
+        "corchea" si es corchea
+    """
     if posiciones_cuadrado[3] - posiciones_cuadrado[2] < posiciones_rectangulo[3] - posiciones_rectangulo[2]:
         return "corchea"
-    # agrandar_lado(posiciones_rectangulo, numero_pixeles_negros, UMBRAL_NEGRO, pentagrama)
     return "negra"
 
-def encontrar_longitud_nota(figura, centro:tuple[int,int], UMBRAL_NEGRO:int, posiciones_cuadrado:list[int], posiciones_rectangulo:list[int], pentagrama:list) -> str:
+def encontrar_longitud_nota(figura:list, UMBRAL_NEGRO:int, posiciones_cuadrado:list[int], posiciones_rectangulo:list[int]) -> str:
+    """
+    Encuentra qué tipo de figura es (blanca, negra, redonda, corchea)
 
+    Args:
+        figura (list): La figura que hay que estudiar
+        UMBRAL_NEGRO (int): Valor a partir del cual un pixel se puede considerar negro (0 - 255)
+        posiciones_cuadrado (list): Las posiciones del cuadrado que contiene a la nota
+        posiciones_rectangulo (list): Las posiciones del rectángulo que contiene a la nota y al cuadrado
+
+    Returns:
+        figura (str): La figura que es
+    """
     pixeles = len(figura) * len(figura[0])
     numero_pixeles_negros = (figura < UMBRAL_NEGRO).sum()
     porcentaje = numero_pixeles_negros / pixeles
@@ -84,14 +135,23 @@ def encontrar_longitud_nota(figura, centro:tuple[int,int], UMBRAL_NEGRO:int, pos
     figura  = "negra"
 
     if is_negra:
-        figura = diferenciar_entre_figuras_negras(posiciones_cuadrado, posiciones_rectangulo, pentagrama, numero_pixeles_negros, UMBRAL_NEGRO)
+        figura = diferenciar_entre_figuras_negras(posiciones_cuadrado, posiciones_rectangulo)
     else:
         figura = diferenciar_blanca_redonda(posiciones_cuadrado, posiciones_rectangulo)
 
     return figura
 
 
-def get_octava(index_row_pentagrama: int):
+def get_octava(index_row_pentagrama: int) -> int:
+    """
+    Encuentra que octava es para poder usarla en la fórmula para tocar las notas
+
+    Args:
+        index_row_pentagrama (int): índice en la lista que contiene las posiciones de las filas del pentagrama
+
+    Returns:
+        octava (int): la octava que hay que introducir en la fórmula para que suene adecuadamente
+    """
     octava_alta = 11 - index_row_pentagrama >= 7
     octava_baja = 11 - index_row_pentagrama < 0
 
@@ -104,8 +164,16 @@ def get_octava(index_row_pentagrama: int):
 
     return octava
 
-def diferenciar_figuras(figura, posiciones_cuadrado, posiciones_rectangulo, rows_pentagrama, distancia, UMBRAL_NEGRO:int, pentagrama:list) -> Nota:
-
+def diferenciar_figuras(figura:list, posiciones_cuadrado:list, posiciones_rectangulo:list, rows_pentagrama:list, distancia:int, UMBRAL_NEGRO:int) -> Nota:
+    """
+    Args:
+        figura (list): La figura que hay que estudiar
+        posiciones_cuadrado (list): Las posiciones del cuadrado que contiene a la nota
+        posiciones_rectangulo (list): Las posiciones del rectángulo que contiene a la nota y al cuadrado
+        rows_pentagrama (list): Lista con las posiciones de las líneas del pentagrama
+        distancia (int): La distancia entre las líneas del pentagrama
+        UMBRAL_NEGRO (int): Valor a partir del cual un pixel se puede considerar negro (0 - 255)
+    """
     NOTAS_MUSICALES = {0: "Do", 1: "Re", 2: "Mi", 
                         3: "Fa", 4: "Sol", 5: "La", 6: "Si"}
 
@@ -123,14 +191,11 @@ def diferenciar_figuras(figura, posiciones_cuadrado, posiciones_rectangulo, rows
 
     punto_medio:float = posiciones_cuadrado[0] + (posiciones_cuadrado[1] - posiciones_cuadrado[0]) / 2
 
-    punto_medio_y_figura:int = len(figura) // 2
-    punto_medio_x_figura:int = len(figura[0]) // 2
-
     index_row_pentagrama = encontrar_posicion_en_pentagrama(
         punto_medio, rows_pentagrama, distancia)
 
     octava = get_octava(index_row_pentagrama)
 
     
-    figura:str = encontrar_longitud_nota(figura, (punto_medio_x_figura,punto_medio_y_figura), UMBRAL_NEGRO, posiciones_cuadrado, posiciones_rectangulo, pentagrama)
+    figura:str = encontrar_longitud_nota(figura, UMBRAL_NEGRO, posiciones_cuadrado, posiciones_rectangulo)
     return Nota(NOTAS_MUSICALES[(11-index_row_pentagrama) % 7], octava, posiciones_rectangulo, figura)

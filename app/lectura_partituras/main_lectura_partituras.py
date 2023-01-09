@@ -90,7 +90,7 @@ def main_lectura_partituras():
             posiciones_rectangulo = f.sumar_desfase(posiciones_rectangulo, desfase)
 
             nota = diferenciar_figuras(
-                figura, posiciones, posiciones_rectangulo, pentagramas[index_pentagrama], distancia, UMBRAL_NEGRO, imagen_para_recorrer)  # pentagramas
+                figura, posiciones, posiciones_rectangulo, pentagramas[index_pentagrama], distancia, UMBRAL_NEGRO)
             notas.append(nota)
 
             punto_medio = posiciones[0] + (posiciones[1] - posiciones[0]) // 2

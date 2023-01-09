@@ -6,6 +6,7 @@ from Classes.Notas import Partitura
 from lectura_partituras.functions.functions import find_complete_path, get_nombre_fichero, resize_image
 import os
 import cv2 as cv
+from Classes.Errors import ErrorPentagramas
 
 def actualizar_partitura(partitura:Partitura, PATH:str, complete_path:str):
     image_rectangulos = cv.imread(PATH)
@@ -71,7 +72,8 @@ def main_pygame():
     clock = pygame.time.Clock()
 
     img = actualizar_partitura(partitura, PATH, complete_path)
-
+    if len(notas) == 0:
+        raise ErrorPentagramas("No se han encontrado notas")
     i:int = 0
     while running:
         time_delta = clock.tick(60)/1000.0

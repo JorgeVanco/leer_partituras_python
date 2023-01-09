@@ -1,5 +1,5 @@
 import tkinter as tk
-import sv_ttk
+
 
 def save(root, pentagrama, nota, entries):
     i:int = 0
@@ -50,7 +50,7 @@ def open_popup(partitura, index:int):
     button_guardar = tk.Button(root, text="Guardar", padx = 19, pady = 5, command = lambda: save(root, pentagrama, nota, entries), background="green")
     button_guardar.grid(row = i+1, column = 0, columnspan = 3)
     root.bind('<KeyPress>', lambda event: onKeyPress(event, root, pentagrama, nota, entries))
-    sv_ttk.set_theme("dark")
+
     root.mainloop()
 
 def menu_principal():

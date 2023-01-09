@@ -1,5 +1,7 @@
 import tkinter as tk
-from tkinter.filedialog import askopenfilename
+from Classes.Errors import ErrorPath
+
+import easygui
 
 def file_browser() -> str:
     """
@@ -8,14 +10,15 @@ def file_browser() -> str:
 
     returns: path (str) : La ruta a la imagen de la partitura elegida
     """
+    path = "PATGH"
     try:
-        root = tk.Tk()
-        root.withdraw() # part of the import if you are not using other tkinter functions
-        path:str = askopenfilename()
-        root.update()
-        # root.mainloop()
-        root.destroy()
+        top = tk.Tk()
+        top.withdraw()  # hide window
+
+        file_name = tk.filedialog.askopenfilename(parent=top, title = "Select file", filetypes = (("image", ".jpeg"),
+                        ("image", ".png"),
+                        ("image", ".jpg"),))
+        top.destroy()
+        return file_name
     except tk.TclError as e:
-        print("TclError", e)
-        path = None
-    return path  # returns path to file chosen by user
+        raise ErrorPath(f"No se ha podido abrir: {e}")

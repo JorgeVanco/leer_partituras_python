@@ -3,3 +3,6 @@ class ImageNotSelected(Exception):
 
 class ErrorPentagramas(Exception):
     pass
+
+class ErrorPath(Exception):
+    pass

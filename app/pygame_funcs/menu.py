@@ -5,7 +5,7 @@ from lectura_partituras.main_lectura_partituras import main_lectura_partituras
 from pygame_funcs.ajustes import main_ajustes
 from musica.musica import main_musica
 
-from Classes.Errors import ImageNotSelected, ErrorPentagramas
+from Classes.Errors import ImageNotSelected, ErrorPentagramas, ErrorPath
 
 
 def main_menu():
@@ -24,9 +24,11 @@ def main_menu():
     x:int = w // 2 - buttons_width//2
     font = pygame.font.SysFont('Arxºial', 40)
 
-    
+    clock = pygame.time.Clock()
+
 
     while running:
+        time_delta = clock.tick(60)/1000.0
 
         button_lectura = b.Button(x, 30, buttons_width, 100, 'LEER PARTITURA', font, main_lectura_partituras)
         button_edit = b.Button(x, 140, buttons_width, 100, "EDITAR PARTITURA", font, main_pygame)
@@ -56,9 +58,9 @@ def main_menu():
                 running = True
             except FileNotFoundError as e:
                 print(e)
-        
+            except ErrorPath as e:
+                print(e)
         
         pygame.display.update()
-
 
     pygame.quit()

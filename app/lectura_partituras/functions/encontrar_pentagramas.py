@@ -13,6 +13,7 @@ def get_distancia_entre_lineas(distancias: list) -> tuple[int, int]:
     conteo_distancias: dict = {}
     grosor:int = 1
     aumentar_grosor: bool = True
+    distancia = None
     for distancia in distancias:
         if distancia > 1:
             if distancia not in conteo_distancias:

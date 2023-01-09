@@ -7,25 +7,14 @@ import lectura_partituras.functions.functions as f
 from pygame_funcs.main_pygame import main_pygame
 from Classes.Errors import ImageNotSelected, ErrorPentagramas, ErrorPath
 from Classes.Ajustes import Ajustes
-
 import pickle
-
-def limpiar_img(UMBRAL_NEGRO:int, img:list) -> list:
-    for i in range(len(img)):
-        for j in range(len(img[0])):
-            if img[i,j] < UMBRAL_NEGRO:
-                img[i,j] = 0
-            else:
-                img[i,j] = 255
-    return img
 
 
 def main_lectura_partituras():
     # Se abre un menú para elegir la imagen
     try:
-        print("TRYING")
         path = file_browser()
-        print("PATH:", path)
+        
         if path:
             img = cv.imread(path)
         else:
@@ -67,35 +56,36 @@ def main_lectura_partituras():
             partitura_fina = True
 
         img = f.resize_image(fraccion, img)
-        img = limpiar_img(UMBRAL_NEGRO, img)
+        img = f.limpiar_img(UMBRAL_NEGRO, img)
         pentagramas, corte_pentagramas, distancia, grosor = encontrar_pentagramas(
             img, UMBRAL_NEGRO, FRACCION_MINIMA_PIXELES_NEGROS)
         resized = True
 
     if not pentagramas:
         raise ErrorPentagramas("No se han encontrado pentagramas, compruebe los ajustes")
-    # image_rectangulos = img
+
     PUNTOS_MEDIO = []
     for index_pentagrama in range(len(corte_pentagramas)):
-
+        
         imagen_para_recorrer, desfase = f.calcular_imagen_a_recorrer_y_desfase(img, pentagramas,index_pentagrama, corte_pentagramas, distancia)
-
+        cv.imshow("IMA", imagen_para_recorrer)
+        cv.waitKey(0)
         figuras_en_pentagrama = recorrer_pentagrama(imagen_para_recorrer, distancia, UMBRAL_NEGRO, grosor, pentagramas[index_pentagrama], partitura_fina, AJUSTES.DETECTAR_CORCHEAS)
-
+        
         count = 0
         for figura, posiciones, posiciones_rectangulo in figuras_en_pentagrama:
-
+            
             # Sumar desfase por distinto pentagrama
             posiciones = f.sumar_desfase(posiciones, desfase)
             posiciones_rectangulo = f.sumar_desfase(posiciones_rectangulo, desfase)
-
+            
             nota = diferenciar_figuras(
                 figura, posiciones, posiciones_rectangulo, pentagramas[index_pentagrama], distancia, UMBRAL_NEGRO)
             notas.append(nota)
-
+            
             punto_medio = posiciones[0] + (posiciones[1] - posiciones[0]) // 2
             PUNTOS_MEDIO.append((posiciones[2], punto_medio))
-
+            
             count += 1
 
 

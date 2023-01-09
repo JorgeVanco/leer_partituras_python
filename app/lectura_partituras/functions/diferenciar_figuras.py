@@ -1,8 +1,3 @@
-# from recorrer_pentagrama import agrandar_lado
-# Estas 3 lineas son para que funciones el import
-import sys
-from pathlib import Path
-sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 from Classes.Notas import Nota
 
 def get_distancia(punto_medio:int, row:int) -> int:

@@ -155,6 +155,8 @@ def contar_pixeles_negros_en_fila(start: int, row: list, UMBRAL_NEGRO: int) -> i
 
 def encontrar_pentagramas(img: list, UMBRAL_NEGRO: int, FRACCION_MINIMA_PIXELES_NEGROS: float) -> tuple[list, list[tuple], int, int]:
     '''
+    Encuentra las posiciones de los pentagramas de una partitura
+
     Args: 
         img (list): imagen a procesar
         UMBRAL_NEGRO (int): Valor a partir del cual un pixel se puede considerar negro (0 - 255)

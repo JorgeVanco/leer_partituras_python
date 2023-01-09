@@ -166,6 +166,8 @@ def get_octava(index_row_pentagrama: int) -> int:
 
 def diferenciar_figuras(figura:list, posiciones_cuadrado:list, posiciones_rectangulo:list, rows_pentagrama:list, distancia:int, UMBRAL_NEGRO:int) -> Nota:
     """
+    Estudia la nota del pentagrama
+
     Args:
         figura (list): La figura que hay que estudiar
         posiciones_cuadrado (list): Las posiciones del cuadrado que contiene a la nota
@@ -173,6 +175,9 @@ def diferenciar_figuras(figura:list, posiciones_cuadrado:list, posiciones_rectan
         rows_pentagrama (list): Lista con las posiciones de las líneas del pentagrama
         distancia (int): La distancia entre las líneas del pentagrama
         UMBRAL_NEGRO (int): Valor a partir del cual un pixel se puede considerar negro (0 - 255)
+    
+    Returns:
+        Nota (Nota): Objeto de la nota que se ha estudiado con todas sus características
     """
     NOTAS_MUSICALES = {0: "Do", 1: "Re", 2: "Mi", 
                         3: "Fa", 4: "Sol", 5: "La", 6: "Si"}

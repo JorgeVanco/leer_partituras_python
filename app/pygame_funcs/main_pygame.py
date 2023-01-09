@@ -3,7 +3,7 @@ import pygame
 import pygame_gui
 from pygame_funcs.pop_up import pop_up as pop
 from Classes.Notas import Partitura
-from lectura_partituras.functions.functions import find_complete_path
+from lectura_partituras.functions.functions import find_complete_path, get_nombre_fichero
 import os
 import cv2 as cv
 
@@ -24,17 +24,6 @@ def actualizar_partitura(partitura:Partitura, PATH:str, complete_path:str):
     cv.imwrite(complete_path + "app/pygame_funcs/imagen_partitura_modificada.png", image_rectangulos)
     return pygame.image.load(complete_path + "app/pygame_funcs/imagen_partitura_modificada.png")
 
-def get_nombre_partitura(PATH:str) -> str:
-    
-    name = ""
-    i = len(PATH) - 1
-    letra = PATH[i]
-    while letra != "/" and i >= 0:
-        name = letra + name
-        i -= 1
-        letra = PATH[i]
-
-    return name
 
 
 def main_pygame():
@@ -132,7 +121,7 @@ def main_pygame():
     with open(complete_path + "app/notas_partituras/notas_pruebas.obj", "wb") as fh:
         pickle.dump(partitura.notas, fh)
 
-    NOMBRE_IMAGEN = get_nombre_partitura(PATH)
+    NOMBRE_IMAGEN = get_nombre_fichero(PATH)
     pygame.image.save(img, complete_path + "app/pygame_funcs/" + NOMBRE_IMAGEN)
     os.remove(complete_path + "app/pygame_funcs/imagen_partitura_modificada.png")
 

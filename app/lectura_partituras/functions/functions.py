@@ -37,3 +37,16 @@ def find_complete_path():
     file_path = __file__.replace("\\", "/")
     index = file_path.find("app")
     return file_path[:index]
+
+
+def get_nombre_fichero(PATH:str) -> str:
+    
+    name:str = ""
+    i:int = len(PATH) - 1
+    letra:str = PATH[i]
+    while letra != "/" and i >= 0:
+        name = letra + name
+        i -= 1
+        letra = PATH[i]
+
+    return name

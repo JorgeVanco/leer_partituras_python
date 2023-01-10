@@ -1,5 +1,7 @@
 import cv2 as cv
 import numpy as np
+import pickle
+from Classes.Ajustes import Ajustes
 
 def calcular_imagen_a_recorrer_y_desfase(img:list, pentagramas:list, index_pentagrama:int, corte_pentagramas:list[tuple], distancia:int) -> tuple[list, int]:
     """
@@ -113,3 +115,13 @@ def limpiar_img(UMBRAL_NEGRO:int, img:list) -> list:
             else:
                 img[i,j] = 255
     return img
+
+def get_ajustes():
+    complete_path = find_complete_path(__file__)
+    try:
+        with open(complete_path + "app/ajustes/ajustes.obj", "rb") as fh:
+            AJUSTES = pickle.load(fh)
+    except FileNotFoundError:
+        AJUSTES = Ajustes()
+
+    return AJUSTES

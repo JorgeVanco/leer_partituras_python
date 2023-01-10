@@ -110,7 +110,7 @@ def diferenciar_entre_figuras_negras(posiciones_cuadrado:list[int], posiciones_r
         return "corchea"
     return "negra"
 
-def encontrar_longitud_nota(figura:list, UMBRAL_NEGRO:int, posiciones_cuadrado:list[int], posiciones_rectangulo:list[int]) -> str:
+def encontrar_longitud_nota(figura:list, UMBRAL_NEGRO:int, posiciones_cuadrado:list[int], posiciones_rectangulo:list[int], PORCENTAJE_DIFERENCIAR_NEGRA_BLANCA:float) -> str:
     """
     Encuentra qué tipo de figura es (blanca, negra, redonda, corchea)
 
@@ -119,6 +119,7 @@ def encontrar_longitud_nota(figura:list, UMBRAL_NEGRO:int, posiciones_cuadrado:l
         UMBRAL_NEGRO (int): Valor a partir del cual un pixel se puede considerar negro (0 - 255)
         posiciones_cuadrado (list): Las posiciones del cuadrado que contiene a la nota
         posiciones_rectangulo (list): Las posiciones del rectángulo que contiene a la nota y al cuadrado
+        PORCENTAJE_DIFERENCIAR_NEGRA_BLANCA (float): El porcentaje de pixeles negros mínimos de una figura para ser negra
 
     Returns:
         figura (str): La figura que es
@@ -126,7 +127,7 @@ def encontrar_longitud_nota(figura:list, UMBRAL_NEGRO:int, posiciones_cuadrado:l
     pixeles = len(figura) * len(figura[0])
     numero_pixeles_negros = (figura < UMBRAL_NEGRO).sum()
     porcentaje = numero_pixeles_negros / pixeles
-    is_negra:bool = porcentaje > 0.65
+    is_negra:bool = porcentaje > PORCENTAJE_DIFERENCIAR_NEGRA_BLANCA
     figura  = "negra"
 
     if is_negra:
@@ -159,7 +160,7 @@ def get_octava(index_row_pentagrama: int) -> int:
 
     return octava
 
-def diferenciar_figuras(figura:list, posiciones_cuadrado:list, posiciones_rectangulo:list, rows_pentagrama:list, distancia:int, UMBRAL_NEGRO:int) -> Nota:
+def diferenciar_figuras(figura:list, posiciones_cuadrado:list, posiciones_rectangulo:list, rows_pentagrama:list, distancia:int, UMBRAL_NEGRO:int, PORCENTAJE_DIFERENCIAR_NEGRA_BLANCA:float) -> Nota:
     """
     Estudia la nota del pentagrama
 
@@ -170,7 +171,7 @@ def diferenciar_figuras(figura:list, posiciones_cuadrado:list, posiciones_rectan
         rows_pentagrama (list): Lista con las posiciones de las líneas del pentagrama
         distancia (int): La distancia entre las líneas del pentagrama
         UMBRAL_NEGRO (int): Valor a partir del cual un pixel se puede considerar negro (0 - 255)
-    
+        PORCENTAJE_DIFERENCIAR_NEGRA_BLANCA (float): El porcentaje de pixeles negros mínimos de una figura para ser negra
     Returns:
         Nota (Nota): Objeto de la nota que se ha estudiado con todas sus características
     """
@@ -197,5 +198,6 @@ def diferenciar_figuras(figura:list, posiciones_cuadrado:list, posiciones_rectan
     octava = get_octava(index_row_pentagrama)
 
     
-    figura:str = encontrar_longitud_nota(figura, UMBRAL_NEGRO, posiciones_cuadrado, posiciones_rectangulo)
+    figura:str = encontrar_longitud_nota(figura, UMBRAL_NEGRO, posiciones_cuadrado, posiciones_rectangulo, PORCENTAJE_DIFERENCIAR_NEGRA_BLANCA)
+
     return Nota(NOTAS_MUSICALES[(11-index_row_pentagrama) % 7], octava, posiciones_rectangulo, figura)

@@ -30,11 +30,7 @@ def main_lectura_partituras():
     img = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
     # PARAMETROS
 
-    try:
-        with open(complete_path + "app/ajustes/ajustes.obj", "rb") as fh:
-            AJUSTES = pickle.load(fh)
-    except FileNotFoundError:
-        AJUSTES = Ajustes()
+    AJUSTES:Ajustes = f.get_ajustes()
 
     UMBRAL_NEGRO: int = AJUSTES.UMBRAL_NEGRO  # considero negro cualquier valor menor que 140
     FRACCION_MINIMA_PIXELES_NEGROS: float = AJUSTES.FRACCION_MINIMA_PIXELES_NEGROS
@@ -69,7 +65,7 @@ def main_lectura_partituras():
         
         imagen_para_recorrer, desfase = f.calcular_imagen_a_recorrer_y_desfase(img, pentagramas,index_pentagrama, corte_pentagramas, distancia)
         
-        figuras_en_pentagrama = recorrer_pentagrama(imagen_para_recorrer, distancia, UMBRAL_NEGRO, grosor, pentagramas[index_pentagrama], partitura_fina, AJUSTES.DETECTAR_CORCHEAS)
+        figuras_en_pentagrama = recorrer_pentagrama(imagen_para_recorrer, distancia, UMBRAL_NEGRO, grosor, pentagramas[index_pentagrama], partitura_fina, AJUSTES.DETECTAR_CORCHEAS, AJUSTES.PORCENTAJE_DETECTAR_NOTA)
         
         count = 0
         for figura, posiciones, posiciones_rectangulo in figuras_en_pentagrama:
@@ -79,7 +75,7 @@ def main_lectura_partituras():
             posiciones_rectangulo = f.sumar_desfase(posiciones_rectangulo, desfase)
             
             nota = diferenciar_figuras(
-                figura, posiciones, posiciones_rectangulo, pentagramas[index_pentagrama], distancia, UMBRAL_NEGRO)
+                figura, posiciones, posiciones_rectangulo, pentagramas[index_pentagrama], distancia, UMBRAL_NEGRO, AJUSTES.PORCENTAJE_DIFERENCIAR_NEGRA_BLANCA)
             notas.append(nota)
             
             punto_medio = posiciones[0] + (posiciones[1] - posiciones[0]) // 2

@@ -59,7 +59,7 @@ def agrandar_cuadrado(pentagrama:list[list[int]], posiciones_cuadrado:list[int],
     return posiciones_cuadrado, posiciones_rectangulo
 
 
-def recorrer_pentagrama(pentagrama:list, distancia:int, UMBRAL_NEGRO:int, GROSOR:int, posiciones_pentagrama:list[int,int], partitura_fina:bool, DETECTAR_CORCHEAS: bool) -> list[tuple]:
+def recorrer_pentagrama(pentagrama:list, distancia:int, UMBRAL_NEGRO:int, GROSOR:int, posiciones_pentagrama:list[int,int], partitura_fina:bool, DETECTAR_CORCHEAS: bool, PORCENTAJE_DETECTAR_NOTA:float) -> list[tuple]:
     '''
     Recorre cada pentagrama verticalmente y horizontalmente
     
@@ -91,7 +91,7 @@ def recorrer_pentagrama(pentagrama:list, distancia:int, UMBRAL_NEGRO:int, GROSOR
 
             cuadrado = pentagrama[posicion_vertical:posicion_vertical + distancia, posicion_horizontal:posicion_horizontal + step]
             
-            if len(cuadrado) == distancia and (cuadrado < UMBRAL_NEGRO).sum() > 0.4*(cuadrado <= 255).sum(): 
+            if len(cuadrado) == distancia and (cuadrado < UMBRAL_NEGRO).sum() > PORCENTAJE_DETECTAR_NOTA*(cuadrado <= 255).sum(): 
                 posiciones = [posicion_vertical, posicion_vertical + distancia, posicion_horizontal,posicion_horizontal + step]
                 posiciones_nuevas, posciiones_rectangulo = agrandar_cuadrado(pentagrama, posiciones, UMBRAL_NEGRO, GROSOR, AUMENTO_MINIMO_LATERALES, AUMENTO_MINIMO_ARRIBA_ABAJO, posiciones_pentagrama, partitura_fina, DETECTAR_CORCHEAS)  
                 cuadrado = pentagrama[posiciones_nuevas[0] : posiciones_nuevas[1], posiciones_nuevas[2]: posiciones_nuevas[3]]

@@ -31,7 +31,6 @@ class Button:
                 self.button_surface.fill(self.fillColors['pressed'])
                 try:
                     running = self.onclickFunction()
-                    print("Running")
                 except ImageNotSelected as e:
                     raise ImageNotSelected(e)
 

@@ -36,7 +36,6 @@ def main_musica():
     w, h = img.get_size()
 
     screen = pygame.display.set_mode((w, h))
-    window_surface = pygame.display.set_mode((w, h))
     pygame.display.set_caption(partitura.nombre)
     img.convert()
 

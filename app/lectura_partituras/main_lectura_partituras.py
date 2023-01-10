@@ -68,8 +68,7 @@ def main_lectura_partituras():
     for index_pentagrama in range(len(corte_pentagramas)):
         
         imagen_para_recorrer, desfase = f.calcular_imagen_a_recorrer_y_desfase(img, pentagramas,index_pentagrama, corte_pentagramas, distancia)
-        cv.imshow("IMA", imagen_para_recorrer)
-        cv.waitKey(0)
+        
         figuras_en_pentagrama = recorrer_pentagrama(imagen_para_recorrer, distancia, UMBRAL_NEGRO, grosor, pentagramas[index_pentagrama], partitura_fina, AJUSTES.DETECTAR_CORCHEAS)
         
         count = 0

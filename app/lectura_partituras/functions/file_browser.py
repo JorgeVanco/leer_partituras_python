@@ -10,7 +10,6 @@ def file_browser() -> str:
 
     returns: path (str) : La ruta a la imagen de la partitura elegida
     """
-    path = "PATGH"
     try:
         top = tk.Tk()
         top.withdraw()  # hide window

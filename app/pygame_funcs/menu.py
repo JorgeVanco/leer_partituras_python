@@ -27,7 +27,7 @@ def main_menu():
 
     while running:
         pygame.display.set_caption("Menú Lectura Partituras")
-        time_delta = clock.tick(60)/1000.0
+        clock.tick(60)/1000.0
 
         button_lectura = b.Button(x, 30, buttons_width, 100, 'LEER PARTITURA', font, main_lectura_partituras)
         button_edit = b.Button(x, 140, buttons_width, 100, "EDITAR PARTITURA", font, main_pygame)

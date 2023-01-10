@@ -188,9 +188,6 @@ def encontrar_pentagramas(img: list, UMBRAL_NEGRO: int, FRACCION_MINIMA_PIXELES_
                     distancias.append(distancia_linea_a_linea)
                 lineas.append(row)
 
-    # comprobar si se ha acabado el pentagrama mirado las distancias
-    # más comunes y mayores que 1(a veces puede coger dos lineas seguidas)
-
     distancia, grosor = get_distancia_entre_lineas(distancias)
 
     pentagramas: list = lista_pentagramas(lineas, distancia)

@@ -56,7 +56,6 @@ def resize_image(fraccion:float, img:list) -> list:
     """
     print("Resizing...")
     w, h = img.shape[:2]
-    # fraccion = 1
     print(w, h, end=" -> ")
     w = int(np.round(fraccion * w))
     h = int(np.round(fraccion * h))

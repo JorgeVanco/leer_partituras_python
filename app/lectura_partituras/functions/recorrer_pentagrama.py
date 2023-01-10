@@ -1,11 +1,3 @@
-
-def asignar_aumento_minimo(lado:int, AUMENTO_MINIMO_ARRIBA_ABAJO:int, AUMENTO_MINIMO_LATERALES:int) -> int:
-    if lado <= 1:
-        AUMENTO_MINIMO = AUMENTO_MINIMO_ARRIBA_ABAJO
-    else:
-        AUMENTO_MINIMO = AUMENTO_MINIMO_LATERALES
-    return AUMENTO_MINIMO
-
 def agrandar_lado(posiciones_cuadrado:list[int], suma_actual:int, UMBRAL_NEGRO:int, pentagrama:list[list[int]], AUMENTO_MINIMO:int, AUMENTO_MINIMO_LATERALES:int, lado:int, posiciones_rectangulo:list = None, fijado_cuadrado:bool = False) -> tuple[list[int], list[int], int]:
     """
     Agranda un lado del cuadrado de la figura hasta que el número de píxeles negros que aumentan no superan el umbral de AUMENTO_MINIMO

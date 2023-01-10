@@ -10,10 +10,11 @@ class Nota:
         self.pentagrama = pentagrama
 
 class Partitura:
-    def __init__(self, posiciones_pentagramas:list, notas:list) -> None:
+    def __init__(self, posiciones_pentagramas:list, notas:list, nombre:str) -> None:
         self.notas = notas
         self.posiciones_pentagramas = posiciones_pentagramas
         self.pentagramas = None
+        self.nombre = nombre
 
         self.asignar_notas_a_pentagrama()
 

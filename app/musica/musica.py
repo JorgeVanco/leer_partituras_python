@@ -1,6 +1,6 @@
 from pysine import sine
 import math
-import json
+import pygame
 import pickle
 import time
 from lectura_partituras.functions.functions import find_complete_path
@@ -16,30 +16,52 @@ def frecuencia(nota:int, octava:int) -> float:
 NOTAS_MUSICALES = {0: "Do", 1: "Re", 2: "Mi", 
                         3: "Fa", 4: "Sol", 5: "La", 6: "Si"}
 NOTAS_MUSICALES = {v:k for k,v in NOTAS_MUSICALES.items()}
-# frecuencias = {
-#     "DO": 
-# }
-# print(frecuencia(10, 3))
-# sine(frequency=440.0, duration=1.0)  # plays a 1s sine wave at 440 Hz
-# sine(frequency=415.3, duration=1.0)  # plays a 1s sine wave at 440 Hz
+
 def main_musica():
     complete_path = find_complete_path()
+    pygame.init()
 
     try:
         with open(complete_path + "app/notas_partituras/notas_pruebas.obj", "rb") as fh:
-            notas = pickle.load(fh)
+            partitura = pickle.load(fh)
     except FileNotFoundError:
         raise FileNotFoundError("No se ha leído ninguna partitura todavía")
 
+    RED = (255, 0, 0)
+    GRAY = (150, 150, 150)
 
-    for nota in notas:
+    img = pygame.image.load(partitura.img_path)
+
+
+    w, h = img.get_size()
+
+    screen = pygame.display.set_mode((w, h))
+    window_surface = pygame.display.set_mode((w, h))
+    pygame.display.set_caption(partitura.nombre)
+    img.convert()
+
+    rect = img.get_rect()
+    rect.center = w//2, h//2
+
+    i = 0
+
+    running = True
+    for nota in partitura.notas:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+            
+        if not running:
+            break
+
+        screen.fill(GRAY)
+        screen.blit(img, rect)
+        posiciones = nota.rectangulo
+        pygame.draw.rect(screen, RED, pygame.Rect(posiciones[2] - 5,posiciones[0] - 5,posiciones[3] - posiciones[2] + 10,posiciones[1] - posiciones[0] + 10), 2)
+        pygame.display.update()
         if nota.nota == "silencio":
             time.sleep(0.5)
         elif nota.nota != "clave de sol" and nota.nota != "otra figura":
-            # print(getattr(nota, "octava"))
-            # octava = 3
-            # if nota.octava_alta: octava += 1
-            # elif nota.octava_baja: octava -= 1
             frec = frecuencia(NOTAS_MUSICALES[nota.nota] + 1, nota.octava)   
             if nota.figura.lower() == "negra":
                 duracion = 0.5
@@ -51,3 +73,8 @@ def main_musica():
                 duracion = 0.25
             sine(frec, duracion) 
             time.sleep(0.1)
+
+        i += 1
+        
+
+    return False

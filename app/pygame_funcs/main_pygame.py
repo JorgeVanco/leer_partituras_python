@@ -30,6 +30,7 @@ def actualizar_partitura(partitura:Partitura, PATH:str, complete_path:str):
 def main_pygame():
 
     complete_path = find_complete_path()
+    
 
     pygame.init()
 
@@ -46,7 +47,8 @@ def main_pygame():
         fraccion = pickle.load(fh)
 
     
-
+    NOMBRE_IMAGEN = get_nombre_fichero(PATH)
+    NOMBRE_PARTITURA = NOMBRE_IMAGEN[:NOMBRE_IMAGEN.find(".")]
     img = pygame.image.load(PATH)
 
     if resized:
@@ -61,6 +63,7 @@ def main_pygame():
 
     screen = pygame.display.set_mode((w, h))
     window_surface = pygame.display.set_mode((w, h))
+    pygame.display.set_caption(NOMBRE_PARTITURA)
 
     img.convert()
 
@@ -68,7 +71,7 @@ def main_pygame():
     rect.center = w//2, h//2
 
 
-    partitura = Partitura(posiciones_pentagramas, notas)
+    partitura = Partitura(posiciones_pentagramas, notas, NOMBRE_PARTITURA)
     clock = pygame.time.Clock()
 
     img = actualizar_partitura(partitura, PATH, complete_path)
@@ -128,14 +131,19 @@ def main_pygame():
 
 
 
-    with open(complete_path + "app/notas_partituras/notas_pruebas.obj", "wb") as fh:
-        pickle.dump(partitura.notas, fh)
+    
 
-    NOMBRE_IMAGEN = get_nombre_fichero(PATH)
-    pygame.image.save(img, complete_path + "app/pygame_funcs/imagenes_editadas/" + NOMBRE_IMAGEN)
+    img_path = complete_path + "app/pygame_funcs/imagenes_editadas/" + NOMBRE_IMAGEN
+    partitura.img_path = img_path
+
+    pygame.image.save(img, partitura.img_path)
+
     os.remove(complete_path + "app/pygame_funcs/imagenes_editadas/imagen_partitura_modificada.png")
 
     if resized:
         os.remove(complete_path+"app/pygame_funcs/imagen_resized.png")
+
+    with open(complete_path + "app/notas_partituras/notas_pruebas.obj", "wb") as fh:
+        pickle.dump(partitura, fh)
 
     return True

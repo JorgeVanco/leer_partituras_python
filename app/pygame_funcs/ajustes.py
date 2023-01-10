@@ -49,7 +49,7 @@ def draw_menu(menu, screen, AJUSTES, AJUSTES_DEFAULT, complete_path):
 
 def main_ajustes():
     # pygame.init()
-    complete_path = find_complete_path()
+    complete_path = find_complete_path(__file__)
     
     COLORS = {"GRAY": (150, 150, 150), "RED": (255, 0, 0), "BG": (20, 20, 20)}
 

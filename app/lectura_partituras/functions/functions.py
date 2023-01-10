@@ -63,14 +63,15 @@ def resize_image(fraccion:float, img:list) -> list:
     print(w, h)
     return cv.resize(img, (h, w))
 
-def find_complete_path() -> str:
+def find_complete_path(file) -> str:
     """
     Encuentra la ruta absoluta del directorio Lectura_partituras_python para poder ejecutar el programa desde cualquier lugar
 
     Returns:
         file_path (str): La ruta
     """
-    file_path = __file__.replace("\\", "/")
+
+    file_path = file.replace("\\", "/")
     index = file_path.find("app")
     return file_path[:index]
 

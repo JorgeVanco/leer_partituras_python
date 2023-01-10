@@ -25,7 +25,7 @@ def main_lectura_partituras():
         raise ImageNotSelected("No image selected")
     except ErrorPath as e:
         raise ErrorPath(e)
-    complete_path = f.find_complete_path()
+    complete_path = f.find_complete_path(__file__)
 
     img = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
     # PARAMETROS

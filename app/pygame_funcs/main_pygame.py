@@ -29,7 +29,7 @@ def actualizar_partitura(partitura:Partitura, PATH:str, complete_path:str):
 
 def main_pygame():
 
-    complete_path = find_complete_path()
+    complete_path = find_complete_path(__file__)
     
 
     pygame.init()

@@ -18,7 +18,7 @@ NOTAS_MUSICALES = {0: "Do", 1: "Re", 2: "Mi",
 NOTAS_MUSICALES = {v:k for k,v in NOTAS_MUSICALES.items()}
 
 def main_musica():
-    complete_path = find_complete_path()
+    complete_path = find_complete_path(__file__)
     pygame.init()
 
     try:

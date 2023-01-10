@@ -1,13 +1,17 @@
 import cv2 as cv
 import numpy as np
 
-def calcular_imagen_a_recorrer_y_desfase(img:list, pentagramas:list, index_pentagrama:int, corte_pentagramas:list, distancia:int) -> tuple[list, int]:
+def calcular_imagen_a_recorrer_y_desfase(img:list, pentagramas:list, index_pentagrama:int, corte_pentagramas:list[tuple], distancia:int) -> tuple[list, int]:
     """
-    Determina la imagen del pentagrama a partir de las posiciones de los pentagramas
+    Determina la imagen del pentagrama a partir de las posiciones de los pentagramas y calcula el desfase de pixeles
+    desde el inicio al pentagrama actual
 
     Args:
         img (list): Imagen de la partitura
-        pentagramas (list): 
+        pentagramas (list): Lista con las posiciones iniciales y finales de las filas de los pentagramas
+        index_pentagrama (int): Índice del pentagrama actual en la lista pentagramas
+        corte_pentagramas (list[tuple]): lista con la posición inicial y final para cada corte en la imagen
+        distancia (int): La distancia entre las líneas del pentagrama
 
     Returns:
         imagen_para_recorrer (list): La imagen del pentagrama para ser recorrida

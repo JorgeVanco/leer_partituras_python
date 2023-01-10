@@ -17,7 +17,7 @@ def actualizar_partitura(partitura:Partitura, PATH:str, complete_path:str):
             posiciones = nota.rectangulo
             org = (posiciones[2] + (abs(posiciones[3] - posiciones[2])) //
                             2, pentagrama.posiciones[-1] - 20*(count % 2)-5)
-            if nota.nota != "otra figura":
+            if nota.nota != "Otra figura":
                 image_rectangulos = cv.putText(
                     image_rectangulos, nota.nota + " " + str(nota.figura), org, cv.FONT_HERSHEY_SIMPLEX, 0.35, 0, 1, cv.LINE_AA)
             count += 1

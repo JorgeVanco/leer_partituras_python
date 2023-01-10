@@ -184,11 +184,11 @@ def diferenciar_figuras(figura:list, posiciones_cuadrado:list, posiciones_rectan
     if  altura >= altura_pentagrama:
         # se quita las claves de sol, el tiempo, las lineas verticales
         if posiciones_cuadrado[3] - posiciones_cuadrado[2] > 1/3 * altura:
-            return Nota("clave de sol", 0, posiciones_rectangulo)
-        return Nota("otra figura", 0, posiciones_rectangulo)
+            return Nota("Clave de sol", 0, posiciones_rectangulo)
+        return Nota("Otra figura", 0, posiciones_rectangulo)
 
     elif altura >= 0.5 * (altura_pentagrama):
-        return Nota("silencio", 0, posiciones_rectangulo)
+        return Nota("Silencio", 0, posiciones_rectangulo)
 
     punto_medio:float = posiciones_cuadrado[0] + (posiciones_cuadrado[1] - posiciones_cuadrado[0]) / 2
 

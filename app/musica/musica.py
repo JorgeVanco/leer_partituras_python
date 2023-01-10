@@ -58,9 +58,9 @@ def main_musica():
         posiciones = nota.rectangulo
         pygame.draw.rect(screen, RED, pygame.Rect(posiciones[2] - 5,posiciones[0] - 5,posiciones[3] - posiciones[2] + 10,posiciones[1] - posiciones[0] + 10), 2)
         pygame.display.update()
-        if nota.nota == "silencio":
+        if nota.nota == "Silencio":
             time.sleep(0.5)
-        elif nota.nota != "clave de sol" and nota.nota != "otra figura":
+        elif nota.nota != "Clave de sol" and nota.nota != "Otra figura":
             frec = frecuencia(NOTAS_MUSICALES[nota.nota] + 1, nota.octava)   
             if nota.figura.lower() == "negra":
                 duracion = 0.5

@@ -48,7 +48,7 @@ def open_popup(partitura, index: int):
 
     for var, value in vars(nota).items():
         if var != "rectangulo" and var != "pentagrama" and var != "alteracion":
-            labels.append(tk.Label(root, text=var).grid(row=i, column=0))
+            labels.append(tk.Label(root, text = var).grid(row=i, column=0))
             entry = tk.Entry(root)
             entry.grid(row=i, column=1)
             entry.insert(0, value)
@@ -89,4 +89,3 @@ def open_popup(partitura, index: int):
     root.mainloop()
 
     return True
-

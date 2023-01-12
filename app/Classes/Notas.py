@@ -5,7 +5,7 @@ class Nota:
         self.rectangulo = rectangulo
         self.figura = figura
         self.pentagrama = None
-        self.alteracion = alteracion 
+        self.alteracion = alteracion
 
     def set_pentagrama(self, pentagrama):
         self.pentagrama = pentagrama
@@ -37,7 +37,6 @@ class Partitura:
                 index_notas += 1
             self.pentagramas[index_pentagrama].notas = notas_pentagrama
             self.pentagramas[index_pentagrama].asignar_pentagrama_a_nota()
-            # lista_pentagramas.append(Pentagrama(notas_pentagrama, self.posiciones_pentagramas[index_pentagrama]))
             index_pentagrama += 1
 
 

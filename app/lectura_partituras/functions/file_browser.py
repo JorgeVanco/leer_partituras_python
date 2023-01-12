@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter import filedialog
 from Classes.Errors import ErrorPath
 
 def file_browser() -> str:
@@ -12,7 +13,7 @@ def file_browser() -> str:
         top = tk.Tk()
         top.withdraw()  # hide window
 
-        file_name = tk.filedialog.askopenfilename(parent=top, title = "Select file", filetypes = (("image", ".jpeg"),
+        file_name = filedialog.askopenfilename(parent=top, title = "Select file", filetypes = (("image", ".jpeg"),
                         ("image", ".png"),
                         ("image", ".jpg"),))
         top.destroy()

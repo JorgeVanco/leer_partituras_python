@@ -1,10 +1,11 @@
 class Nota:
-    def __init__(self, nota, octava:int, rectangulo, figura="") -> None:
+    def __init__(self, nota, octava:int, rectangulo, figura="", alteracion:str = "Natural") -> None:
         self.nota = nota
         self.octava = octava
         self.rectangulo = rectangulo
         self.figura = figura
         self.pentagrama = None
+        self.alteracion = alteracion 
 
     def set_pentagrama(self, pentagrama):
         self.pentagrama = pentagrama

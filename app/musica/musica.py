@@ -13,9 +13,8 @@ def frecuencia(nota:int, octava:int) -> float:
     """
     return 440 * math.exp((octava - 3 + (nota - 10)/12) * math.log(2))
 
-NOTAS_MUSICALES = {0: "Do", 1: "Re", 2: "Mi", 
-                        3: "Fa", 4: "Sol", 5: "La", 6: "Si"}
-NOTAS_MUSICALES = {v:k for k,v in NOTAS_MUSICALES.items()}
+NOTAS_MUSICALES = {"Do":1, "Re":3, "Mi":5, "Fa":6, "Sol":8, "La":10, "Si":12}
+ALTERACIONES = {"Sostenido" : 1, "Natural": 0, "Bemol": -1}
 
 def main_musica():
     complete_path = find_complete_path(__file__)
@@ -61,7 +60,7 @@ def main_musica():
         if nota.nota == "Silencio":
             time.sleep(0.5)
         elif nota.nota != "Clave de sol" and nota.nota != "Otra figura":
-            frec = frecuencia(NOTAS_MUSICALES[nota.nota] + 1, nota.octava)   
+            frec = frecuencia(NOTAS_MUSICALES[nota.nota] + nota.alteracion, nota.octava)   
             if nota.figura.lower() == "negra":
                 duracion = 0.5
             elif nota.figura.lower() == "blanca":

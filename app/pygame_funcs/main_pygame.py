@@ -10,6 +10,7 @@ from Classes.Errors import ErrorPentagramas
 
 def actualizar_partitura(partitura:Partitura, PATH:str, complete_path:str):
     image_rectangulos = cv.imread(PATH)
+    simbolos_alteraciones = {"Sostenido": "# ", "Natural": " ", "Bemol": " b "}
     for pentagrama in partitura.pentagramas:
         count = 0
         
@@ -18,8 +19,9 @@ def actualizar_partitura(partitura:Partitura, PATH:str, complete_path:str):
             org = (posiciones[2] + (abs(posiciones[3] - posiciones[2])) //
                             2, pentagrama.posiciones[-1] - 20*(count % 2)-5)
             if nota.nota != "Otra figura":
+                
                 image_rectangulos = cv.putText(
-                    image_rectangulos, nota.nota + " " + str(nota.figura), org, cv.FONT_HERSHEY_SIMPLEX, 0.35, 0, 1, cv.LINE_AA)
+                    image_rectangulos, nota.nota + simbolos_alteraciones[nota.alteracion] + str(nota.figura), org, cv.FONT_HERSHEY_SIMPLEX, 0.35, 0, 1, cv.LINE_AA)
             count += 1
 
     cv.imwrite(complete_path + "app/pygame_funcs/imagenes_editadas/imagen_partitura_modificada.png", image_rectangulos)

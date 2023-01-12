@@ -86,13 +86,13 @@ def diferenciar_blanca_redonda(posiciones_cuadrado:list[int], posiciones_rectang
         posiciones_rectangulo (list): Las posiciones del rectángulo que contiene a la nota y al cuadrado
 
     Returns:
-        "redonda" si es redonda
-        "blanca" si es blanca
+        "Redonda" si es redonda
+        "Blanca" si es blanca
     """
     is_blanca = abs(posiciones_rectangulo[1] - posiciones_rectangulo[0]) > 1.5*abs(posiciones_cuadrado[1] - posiciones_cuadrado[0])
     if is_blanca:
-        return "blanca"
-    return "redonda"
+        return "Blanca"
+    return "Redonda"
 
 def diferenciar_entre_figuras_negras(posiciones_cuadrado:list[int], posiciones_rectangulo:list[int]) -> str:
     """
@@ -103,12 +103,12 @@ def diferenciar_entre_figuras_negras(posiciones_cuadrado:list[int], posiciones_r
         posiciones_rectangulo (list): Las posiciones del rectángulo que contiene a la nota y al cuadrado
 
     Returns:
-        "negra" si es negra
-        "corchea" si es corchea
+        "Negra" si es negra
+        "Corchea" si es corchea
     """
     if posiciones_cuadrado[3] - posiciones_cuadrado[2] < posiciones_rectangulo[3] - posiciones_rectangulo[2]:
-        return "corchea"
-    return "negra"
+        return "Corchea"
+    return "Negra"
 
 def encontrar_longitud_nota(figura:list, UMBRAL_NEGRO:int, posiciones_cuadrado:list[int], posiciones_rectangulo:list[int], PORCENTAJE_DIFERENCIAR_NEGRA_BLANCA:float) -> str:
     """

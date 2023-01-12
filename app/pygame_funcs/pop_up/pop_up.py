@@ -1,6 +1,5 @@
 import tkinter as tk
 
-
 def save(root, pentagrama, nota, entries):
     i: int = 0
     for var in vars(nota).keys():
@@ -63,6 +62,5 @@ def open_popup(partitura, index: int):
 
     root.mainloop()
 
+    return True
 
-def menu_principal():
-    pass

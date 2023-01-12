@@ -1,8 +1,6 @@
 import tkinter as tk
 from Classes.Errors import ErrorPath
 
-import easygui
-
 def file_browser() -> str:
     """
     Abre la ventana del explorador de archivos para que el usuario pueda

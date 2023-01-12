@@ -88,10 +88,16 @@ def main_pygame():
                 running = False
             
             elif event.type == pygame.MOUSEBUTTONDOWN:
-                index = partitura.find_index_nota_at_position(pygame.mouse.get_pos())
-                if index:
-                    i = index
-                    cambio_posicion = True
+                
+                if event.button == 1:
+                    index = partitura.find_index_nota_at_position(pygame.mouse.get_pos())
+                    if index:
+                        i = index
+                        cambio_posicion = True
+                    
+                else:
+                    cambio = pop.open_popup(partitura, i)
+                    
 
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT:
@@ -101,8 +107,7 @@ def main_pygame():
                     i += 1
                     cambio_posicion = True
                 elif event.key == pygame.K_RETURN:
-                    pop.open_popup(partitura, i)
-                    cambio = True
+                    cambio = pop.open_popup(partitura, i)
                 elif event.key == pygame.K_BACKSPACE or event.key == pygame.K_DELETE:
                     partitura.borrar_nota(i)
                     cambio = True

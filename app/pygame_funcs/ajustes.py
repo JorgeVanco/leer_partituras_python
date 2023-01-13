@@ -83,6 +83,7 @@ def draw_menu(menu, screen, AJUSTES:Ajustes, AJUSTES_DEFAULT:Ajustes, complete_p
     
 
 
+
 def main_ajustes():
 
     complete_path: str = find_complete_path(__file__)

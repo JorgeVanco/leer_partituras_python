@@ -24,10 +24,13 @@ def actualizar_partitura(partitura:Partitura, PATH:str, complete_path:str):
                     image_rectangulos, nota.nota + simbolos_alteraciones[nota.alteracion] + str(nota.figura), org, cv.FONT_HERSHEY_SIMPLEX, 0.35, 0, 1, cv.LINE_AA)
             count += 1
 
-    cv.imwrite(complete_path + "app/pygame_funcs/imagenes_editadas/imagen_partitura_modificada.png", image_rectangulos)
+    saved_correctly = cv.imwrite(complete_path + "app/pygame_funcs/imagenes_editadas/imagen_partitura_modificada.png", image_rectangulos)
+
+    if not saved_correctly:
+        os.mkdir(complete_path + "app/pygame_funcs/imagenes_editadas/")
+        cv.imwrite(complete_path + "app/pygame_funcs/imagenes_editadas/imagen_partitura_modificada.png", image_rectangulos)
+
     return pygame.image.load(complete_path + "app/pygame_funcs/imagenes_editadas/imagen_partitura_modificada.png")
-
-
 
 def main_pygame():
 
@@ -142,6 +145,7 @@ def main_pygame():
 
     img_path = complete_path + "app/pygame_funcs/imagenes_editadas/" + NOMBRE_IMAGEN
     partitura.img_path = img_path
+
 
     pygame.image.save(img, partitura.img_path)
 

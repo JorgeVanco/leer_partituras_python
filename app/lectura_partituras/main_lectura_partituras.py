@@ -8,6 +8,7 @@ from pygame_funcs.main_pygame import main_pygame
 from Classes.Errors import ImageNotSelected, ErrorPentagramas, ErrorPath
 from Classes.Ajustes import Ajustes
 import pickle
+import os
 
 
 def main_lectura_partituras():
@@ -83,9 +84,14 @@ def main_lectura_partituras():
             
             count += 1
 
+    try:
+        with open(complete_path + "app/notas_partituras/notas_pruebas.obj", "wb") as fh:
+            pickle.dump(notas, fh)
+    except FileNotFoundError:
+        os.mkdir(complete_path + "app/notas_partituras")
+        with open(complete_path + "app/notas_partituras/notas_pruebas.obj", "wb") as fh:
+            pickle.dump(notas, fh)
 
-    with open(complete_path + "app/notas_partituras/notas_pruebas.obj", "wb") as fh:
-        pickle.dump(notas, fh)
 
     with open(complete_path + "app/pygame_funcs/partes_imagenes.obj", "wb") as fh:
         pickle.dump(notas, fh)

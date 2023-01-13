@@ -10,18 +10,37 @@ from Classes.Errors import ErrorPentagramas
 
 def actualizar_partitura(partitura:Partitura, PATH:str, complete_path:str):
     image_rectangulos = cv.imread(PATH)
-    simbolos_alteraciones = {"Sostenido": "# ", "Natural": " ", "Bemol": " b "}
+    SIMBOLOS_ALTERACIONES:dict = {"Sostenido": "# ", "Natural": " ", "Bemol": " b "}
+    alteracion_armadura:str = None
+    notas_afectadas_por_armadura:list = []
+    orden_sostenidos_armadura = ["Fa", "Do", "Sol", "Re", "La", "Mi", "Si"]
+    orden_bemoles_armadura = orden_sostenidos_armadura[::-1]
     for pentagrama in partitura.pentagramas:
         count = 0
         
         for nota in pentagrama.notas:
+            
+
+            if nota.nota == "Armadura":
+                alteracion_armadura = nota.alteracion
+                if alteracion_armadura == "Sostenido":
+                    notas_afectadas_por_armadura = orden_sostenidos_armadura[:nota.numero_alteraciones]
+                elif alteracion_armadura == "Bemol":
+                    notas_afectadas_por_armadura = orden_bemoles_armadura[:nota.numero_alteraciones]
+                else:
+                    notas_afectadas_por_armadura = []
+
             posiciones = nota.rectangulo
             org = (posiciones[2] + (abs(posiciones[3] - posiciones[2])) //
                             2, pentagrama.posiciones[-1] - 20*(count % 2)-5)
             if nota.nota != "Otra figura":
-                
+                if nota.nota not in ["Clave de sol", "Armadura", "Silencio"]:
+                    if nota.nota in notas_afectadas_por_armadura:
+                        nota.alteracion = alteracion_armadura
+                    elif not nota.alteracion_manual:
+                        nota.alteracion = "Natural"
                 image_rectangulos = cv.putText(
-                    image_rectangulos, nota.nota + simbolos_alteraciones[nota.alteracion] + str(nota.figura), org, cv.FONT_HERSHEY_SIMPLEX, 0.35, 0, 1, cv.LINE_AA)
+                    image_rectangulos, nota.nota + SIMBOLOS_ALTERACIONES[nota.alteracion] + str(nota.figura), org, cv.FONT_HERSHEY_SIMPLEX, 0.35, 0, 1, cv.LINE_AA)
             count += 1
 
     saved_correctly = cv.imwrite(complete_path + "app/pygame_funcs/imagenes_editadas/imagen_partitura_modificada.png", image_rectangulos)

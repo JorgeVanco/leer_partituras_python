@@ -184,11 +184,11 @@ def diferenciar_figuras(figura:list, posiciones_cuadrado:list, posiciones_rectan
     if  altura >= altura_pentagrama:
         # se quita las claves de sol, el tiempo, las lineas verticales
         if posiciones_cuadrado[3] - posiciones_cuadrado[2] > 1/3 * altura:
-            return Nota("Clave de sol", 0, posiciones_rectangulo)
-        return Nota("Otra figura", 0, posiciones_rectangulo)
+            return Nota("Clave de sol", posiciones_rectangulo)
+        return Nota("Otra figura", posiciones_rectangulo)
 
     elif altura >= 0.5 * (altura_pentagrama):
-        return Nota("Silencio", 0, posiciones_rectangulo, "Silencio de negra")
+        return Nota("Silencio", posiciones_rectangulo, 3, "Silencio de negra")
 
     punto_medio:float = posiciones_cuadrado[0] + (posiciones_cuadrado[1] - posiciones_cuadrado[0]) / 2
 
@@ -200,4 +200,4 @@ def diferenciar_figuras(figura:list, posiciones_cuadrado:list, posiciones_rectan
     
     figura:str = encontrar_longitud_nota(figura, UMBRAL_NEGRO, posiciones_cuadrado, posiciones_rectangulo, PORCENTAJE_DIFERENCIAR_NEGRA_BLANCA)
 
-    return Nota(NOTAS_MUSICALES[(11-index_row_pentagrama) % 7], octava, posiciones_rectangulo, figura)
+    return Nota(NOTAS_MUSICALES[(11-index_row_pentagrama) % 7], posiciones_rectangulo, octava, figura)

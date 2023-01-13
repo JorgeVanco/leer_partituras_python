@@ -10,8 +10,10 @@ def onKeyPress(event, root):
         root.destroy()
 
 
-def set_nota(root, partitura, pentagrama, POSIBILIDADES, atributo,value, index):
+def set_nota(root, partitura, pentagrama, POSIBILIDADES, atributo,value, index, alteracion_manual:bool = False):
     nota = partitura.notas[index]
+    if alteracion_manual:
+        nota.alteracion_manual = True
     if atributo == "octava":
         POSIBILIDADES_OCTAVAS_REVERSE = {v:k for k,v in POSIBILIDADES["OCTAVAS"].items()}
         value = POSIBILIDADES_OCTAVAS_REVERSE[value]
@@ -37,7 +39,7 @@ def draw(root, partitura, POSIBILIDADES, index):
 
     i: int = 1
 
-    if nota.nota not in ["Clave de sol", "Otra figura", "Silencio"]:
+    if nota.nota not in ["Clave de sol", "Otra figura", "Silencio", "Armadura"]:
         tk.Label(root, text = "Octava: ").grid(row=1, column=0)
         variable_octava = tk.StringVar()
         variable_octava.set(POSIBILIDADES["OCTAVAS"][nota.octava])
@@ -53,7 +55,7 @@ def draw(root, partitura, POSIBILIDADES, index):
         tk.Label(root, text = "Alteración: ").grid(row=3, column=0)
         variable_alteracion = tk.StringVar()
         variable_alteracion.set(nota.alteracion)
-        opciones_alteracion = tk.OptionMenu(root, variable_alteracion, *POSIBILIDADES["ALTERACIONES_POSIBLES"], command = lambda value: set_nota(root, partitura, pentagrama, POSIBILIDADES, "alteracion", value, index))
+        opciones_alteracion = tk.OptionMenu(root, variable_alteracion, *POSIBILIDADES["ALTERACIONES_POSIBLES"], command = lambda value: set_nota(root, partitura, pentagrama, POSIBILIDADES, "alteracion", value, index, True))
         opciones_alteracion.grid(row = 3, column = 1)
         
         i = 4
@@ -67,7 +69,21 @@ def draw(root, partitura, POSIBILIDADES, index):
         opciones_figura.grid(row = 1, column = 1)
         
         i = 2
+        
+    elif nota.nota == "Armadura":
+        tk.Label(root, text = "Alteración: ").grid(row=1, column=0)
+        variable_alteracion = tk.StringVar()
+        variable_alteracion.set(nota.alteracion)
+        opciones_alteracion = tk.OptionMenu(root, variable_alteracion, *POSIBILIDADES["ALTERACIONES_POSIBLES"], command = lambda value: set_nota(root, partitura, pentagrama, POSIBILIDADES, "alteracion", value, index))
+        opciones_alteracion.grid(row = 1, column = 1)
 
+        tk.Label(root, text = "Número alteraciones: ").grid(row=2, column=0)
+        variable_numero_alteraciones = tk.StringVar()
+        variable_numero_alteraciones.set(nota.numero_alteraciones)
+        opciones_numero_alteraciones = tk.OptionMenu(root, variable_numero_alteraciones, 1,2,3,4,5,6,7, command = lambda value: set_nota(root, partitura, pentagrama, POSIBILIDADES, "numero_alteraciones", value, index))
+        opciones_numero_alteraciones.grid(row = 2, column = 1)
+        
+        i = 3
 
     button_borrar = tk.Button(root, text="Borrar nota", padx=19, pady=5, command = lambda: remove(
         root, partitura, index), background="red")
@@ -81,7 +97,7 @@ def draw(root, partitura, POSIBILIDADES, index):
 
 def open_popup(partitura, index: int):
     POSIBILIDADES = {
-        "NOTAS_POSIBLES" : ["Do", "Re", "Mi", "Fa", "Sol", "La", "Si", "Silencio", "Clave de sol", "Otra figura"],
+        "NOTAS_POSIBLES" : ["Do", "Re", "Mi", "Fa", "Sol", "La", "Si", "Silencio", "Clave de sol", "Armadura", "Otra figura"],
         "OCTAVAS" : {2: "Octava baja", 3: "Octava normal", 4: "Octava alta"},
         "FIGURAS_POSIBLES" : ["Corchea", "Negra", "Blanca", "Redonda"],
         "ALTERACIONES_POSIBLES" : ["Natural", "Sostenido", "Bemol"],

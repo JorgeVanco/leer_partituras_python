@@ -30,7 +30,7 @@ def blit_long_text(text:str, screen, font_name, size, x_start, x_end, y_start, c
 def main_instrucciones(buttons_width:int, height:int, font) -> bool:
     pygame.init()
 
-    instrucciones:str = "Seleccione la imagen que quiere leer.\nPuede editarla seleccionando una nota particular, ya sea mediante las flechas del teclado o el ratón.\nLa octava normal es la 3, siendo la alta la 4 y la baja la 2."
+    instrucciones:str = "Seleccione la imagen que quiere leer.\nPuede editarla seleccionando una nota particular. Ya sea mediante las flechas del teclado o el ratón y presionando 'Enter' o click derecho en el ratón.\nEn 'Tocar música' sonará la partitura que acabas de editar.\nEn ajustes tienes todos los parámetros más relevantes para modificar el resultado de la lectura de la partirura, así como la velocidad a la que quieres que suene la partitura."
     
 
     running = True

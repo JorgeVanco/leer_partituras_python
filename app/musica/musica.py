@@ -3,7 +3,8 @@ import math
 import pygame
 import pickle
 import time
-from lectura_partituras.functions.functions import find_complete_path
+from lectura_partituras.functions.functions import find_complete_path, get_ajustes
+from Classes.Ajustes import Ajustes
 
 def frecuencia(nota:int, octava:int) -> float:
     """
@@ -15,6 +16,7 @@ def frecuencia(nota:int, octava:int) -> float:
 
 NOTAS_MUSICALES = {"Do":1, "Re":3, "Mi":5, "Fa":6, "Sol":8, "La":10, "Si":12}
 ALTERACIONES = {"Sostenido" : 1, "Natural": 0, "Bemol": -1}
+SILENCIOS = {"Silencio de negra" : 1, "Silencio de blanca": 2, "Silencio de redonda": 4, "Silencio de corchea": 0.5}
 
 def main_musica():
     complete_path = find_complete_path(__file__)
@@ -26,6 +28,9 @@ def main_musica():
     except FileNotFoundError:
         raise FileNotFoundError("No se ha leído ninguna partitura todavía")
 
+    AJUSTES:Ajustes = get_ajustes()
+    
+    
     RED = (255, 0, 0)
     GRAY = (150, 150, 150)
 
@@ -41,7 +46,6 @@ def main_musica():
     rect = img.get_rect()
     rect.center = w//2, h//2
 
-    i = 0
 
     running = True
     for nota in partitura.notas:
@@ -58,7 +62,8 @@ def main_musica():
         pygame.draw.rect(screen, RED, pygame.Rect(posiciones[2] - 5,posiciones[0] - 5,posiciones[3] - posiciones[2] + 10,posiciones[1] - posiciones[0] + 10), 2)
         pygame.display.update()
         if nota.nota == "Silencio":
-            time.sleep(0.5)
+            silencio = SILENCIOS.get(nota.figura, 1) * 60 / AJUSTES.TEMPO_PARTITURA
+            time.sleep(silencio)
         elif nota.nota != "Clave de sol" and nota.nota != "Otra figura":
             frec = frecuencia(NOTAS_MUSICALES[nota.nota] + ALTERACIONES[nota.alteracion], nota.octava)   
             if nota.figura.lower() == "negra":
@@ -69,10 +74,9 @@ def main_musica():
                 duracion = 2
             elif nota.figura.lower() == "corchea":
                 duracion = 0.25
+            duracion *= 60/AJUSTES.TEMPO_PARTITURA
             sine(frec, duracion) 
             time.sleep(0.1)
 
-        i += 1
-        
 
     return False

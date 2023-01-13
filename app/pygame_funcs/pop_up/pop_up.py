@@ -35,8 +35,6 @@ def draw(root, partitura, POSIBILIDADES, index):
     opciones_nota = tk.OptionMenu(root, variable_nota, *POSIBILIDADES["NOTAS_POSIBLES"], command = lambda value: set_nota(root, partitura, pentagrama, POSIBILIDADES, "nota", value, index))
     opciones_nota.grid(row = 0, column = 1)
 
-    form = [("nota", opciones_nota)]
-
     i: int = 1
 
     if nota.nota not in ["Clave de sol", "Otra figura", "Silencio"]:
@@ -45,23 +43,19 @@ def draw(root, partitura, POSIBILIDADES, index):
         variable_octava.set(POSIBILIDADES["OCTAVAS"][nota.octava])
         opciones_octava = tk.OptionMenu(root, variable_octava, *POSIBILIDADES["OCTAVAS"].values(), command = lambda value: set_nota(root, partitura, pentagrama, POSIBILIDADES, "octava", value, index))
         opciones_octava.grid(row = 1, column = 1)
-
+        
         tk.Label(root, text = "Figura: ").grid(row=2, column=0)
         variable_figura = tk.StringVar()
         variable_figura.set(nota.figura)
         opciones_figura = tk.OptionMenu(root, variable_figura, *POSIBILIDADES["FIGURAS_POSIBLES"], command = lambda value: set_nota(root, partitura, pentagrama, POSIBILIDADES, "figura", value, index))
         opciones_figura.grid(row = 2, column = 1)
-
+        
         tk.Label(root, text = "Alteración: ").grid(row=3, column=0)
         variable_alteracion = tk.StringVar()
         variable_alteracion.set(nota.alteracion)
         opciones_alteracion = tk.OptionMenu(root, variable_alteracion, *POSIBILIDADES["ALTERACIONES_POSIBLES"], command = lambda value: set_nota(root, partitura, pentagrama, POSIBILIDADES, "alteracion", value, index))
         opciones_alteracion.grid(row = 3, column = 1)
-
-        form.append(("octava", variable_octava))
-        form.append(("figura", variable_figura))
-        form.append(("alteracion", variable_alteracion))
-
+        
         i = 4
 
 
@@ -71,7 +65,6 @@ def draw(root, partitura, POSIBILIDADES, index):
         variable_figura.set(nota.figura)
         opciones_figura = tk.OptionMenu(root, variable_figura, *POSIBILIDADES["SILENCIOS_POSIBLES"], command = lambda value: set_nota(root, partitura, pentagrama, POSIBILIDADES, "figura", value, index))
         opciones_figura.grid(row = 1, column = 1)
-        
         
         i = 2
 

@@ -4,7 +4,7 @@ import pygame
 import pickle
 import time
 from lectura_partituras.functions.functions import find_complete_path
-# from Classes.Notas import Nota, Pentagrama
+
 def frecuencia(nota:int, octava:int) -> float:
     """
     Donde "octava" es un entero entre 1 y 8, y "nota" es un entero en el rango de 1 a
@@ -60,7 +60,7 @@ def main_musica():
         if nota.nota == "Silencio":
             time.sleep(0.5)
         elif nota.nota != "Clave de sol" and nota.nota != "Otra figura":
-            frec = frecuencia(NOTAS_MUSICALES[nota.nota] + nota.alteracion, nota.octava)   
+            frec = frecuencia(NOTAS_MUSICALES[nota.nota] + ALTERACIONES[nota.alteracion], nota.octava)   
             if nota.figura.lower() == "negra":
                 duracion = 0.5
             elif nota.figura.lower() == "blanca":

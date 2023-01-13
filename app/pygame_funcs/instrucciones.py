@@ -12,7 +12,7 @@ def blit_long_text(text:str, screen, font_name, size, x_start, x_end, y_start, c
     frases:list = text.split("\n")
     for frase in frases:
         words:list = frase.split(" ")
-        print(words)
+        
         for word in words:
 
             word_t = font.render(word, True, colour)
@@ -56,8 +56,7 @@ def main_instrucciones(buttons_width:int, height:int, font) -> bool:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 to_return = False
-
-
+        
         
         pygame.display.update()
 

@@ -188,7 +188,7 @@ def diferenciar_figuras(figura:list, posiciones_cuadrado:list, posiciones_rectan
         return Nota("Otra figura", 0, posiciones_rectangulo)
 
     elif altura >= 0.5 * (altura_pentagrama):
-        return Nota("Silencio", 0, posiciones_rectangulo)
+        return Nota("Silencio", 0, posiciones_rectangulo, "Silencio de negra")
 
     punto_medio:float = posiciones_cuadrado[0] + (posiciones_cuadrado[1] - posiciones_cuadrado[0]) / 2
 

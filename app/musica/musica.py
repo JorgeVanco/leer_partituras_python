@@ -5,6 +5,7 @@ import pickle
 import time
 from lectura_partituras.functions.functions import find_complete_path, get_ajustes
 from Classes.Ajustes import Ajustes
+from Classes.Notas import Nota
 from Classes.Errors import ErrorGuardado
 
 def frecuencia(nota:int, octava:int) -> float:
@@ -15,11 +16,39 @@ def frecuencia(nota:int, octava:int) -> float:
     """
     return 440 * math.exp((octava - 3 + (nota - 10)/12) * math.log(2))
 
-NOTAS_MUSICALES = {"Do":1, "Re":3, "Mi":5, "Fa":6, "Sol":8, "La":10, "Si":12}
-ALTERACIONES = {"Sostenido" : 1, "Natural": 0, "Bemol": -1}
-SILENCIOS = {"Silencio de negra" : 1, "Silencio de blanca": 2, "Silencio de redonda": 4, "Silencio de corchea": 0.5}
+def get_duracion(nota:Nota, TEMPO_PARTITURA:int) -> float:
+    """
+    Calcula la duración de la nota
 
-def main_musica():
+    Args:
+        nota (Nota): La nota
+        TEMPO_PARTITURA (int): El tempo de la partitura
+
+    Returns:
+        duracion (float): La duración de la nota
+    """
+    if nota.figura == "Negra":
+        duracion = 0.5
+    elif nota.figura == "Blanca":
+        duracion = 1
+    elif nota.figura == "Redonda":
+        duracion = 2
+    elif nota.figura == "Corchea":
+        duracion = 0.25
+    duracion *= 60/TEMPO_PARTITURA
+
+    return duracion
+
+
+def main_musica() -> bool:
+    """
+    Toca la canción a la vez que muestra la nota que está sonando a tiempo real
+    """
+
+    NOTAS_MUSICALES = {"Do":1, "Re":3, "Mi":5, "Fa":6, "Sol":8, "La":10, "Si":12}
+    ALTERACIONES = {"Sostenido" : 1, "Natural": 0, "Bemol": -1}
+    SILENCIOS = {"Silencio de negra" : 1, "Silencio de blanca": 2, "Silencio de redonda": 4, "Silencio de corchea": 0.5}
+    
     complete_path = find_complete_path(__file__)
     pygame.init()
 
@@ -50,35 +79,33 @@ def main_musica():
 
 
     running = True
-    for nota in partitura.notas:
+    i:int = 0
+    
+    while running and i < len(partitura.notas):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-            
-        if not running:
-            break
 
         screen.fill(GRAY)
         screen.blit(img, rect)
+
+        nota = partitura.notas[i]
+
+        # Se dibuja el rectangulo de la nota en la partitura
         posiciones = nota.rectangulo
         pygame.draw.rect(screen, RED, pygame.Rect(posiciones[2] - 5,posiciones[0] - 5,posiciones[3] - posiciones[2] + 10,posiciones[1] - posiciones[0] + 10), 2)
         pygame.display.update()
+
         if nota.nota == "Silencio":
             silencio = SILENCIOS.get(nota.figura, 1) * 60 / AJUSTES.TEMPO_PARTITURA
             time.sleep(silencio)
+
         elif nota.nota != "Clave de sol" and nota.nota != "Otra figura" and nota.nota != "Armadura":
+
             frec = frecuencia(NOTAS_MUSICALES[nota.nota] + ALTERACIONES[nota.alteracion], nota.octava)   
-            if nota.figura.lower() == "negra":
-                duracion = 0.5
-            elif nota.figura.lower() == "blanca":
-                duracion = 1
-            elif nota.figura.lower() == "redonda":
-                duracion = 2
-            elif nota.figura.lower() == "corchea":
-                duracion = 0.25
-            duracion *= 60/AJUSTES.TEMPO_PARTITURA
-            sine(frec, duracion) 
-            time.sleep(0.1)
+            duracion = get_duracion(nota, AJUSTES.TEMPO_PARTITURA)
+            
+            sine(frec, duracion)
+            time.sleep(0.1)  # Para que no suenen juntas dos notas iguales
 
-
-    return False
+        i += 1

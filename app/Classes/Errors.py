@@ -6,3 +6,6 @@ class ErrorPentagramas(Exception):
 
 class ErrorPath(Exception):
     pass
+
+class ErrorGuardado(Exception):
+    pass

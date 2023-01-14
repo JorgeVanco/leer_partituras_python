@@ -13,20 +13,19 @@ def actualizar_partitura(partitura:Partitura, PATH:str, complete_path:str):
     SIMBOLOS_ALTERACIONES:dict = {"Sostenido": "# ", "Natural": " ", "Bemol": " b "}
     alteracion_armadura:str = None
     notas_afectadas_por_armadura:list = []
-    orden_sostenidos_armadura = ["Fa", "Do", "Sol", "Re", "La", "Mi", "Si"]
-    orden_bemoles_armadura = orden_sostenidos_armadura[::-1]
+    ORDEN_SOSTENIDOS_ARMADURA = ["Fa", "Do", "Sol", "Re", "La", "Mi", "Si"]
+    ORDEN_BEMOLES_ARMADURA = ORDEN_SOSTENIDOS_ARMADURA[::-1]
     for pentagrama in partitura.pentagramas:
         count = 0
         
         for nota in pentagrama.notas:
-            
 
             if nota.nota == "Armadura":
                 alteracion_armadura = nota.alteracion
                 if alteracion_armadura == "Sostenido":
-                    notas_afectadas_por_armadura = orden_sostenidos_armadura[:nota.numero_alteraciones]
+                    notas_afectadas_por_armadura = ORDEN_SOSTENIDOS_ARMADURA[:nota.numero_alteraciones]
                 elif alteracion_armadura == "Bemol":
-                    notas_afectadas_por_armadura = orden_bemoles_armadura[:nota.numero_alteraciones]
+                    notas_afectadas_por_armadura = ORDEN_BEMOLES_ARMADURA[:nota.numero_alteraciones]
                 else:
                     notas_afectadas_por_armadura = []
 
@@ -51,12 +50,19 @@ def actualizar_partitura(partitura:Partitura, PATH:str, complete_path:str):
 
     return pygame.image.load(complete_path + "app/pygame_funcs/imagenes_editadas/imagen_partitura_modificada.png")
 
+
+def limpiar(complete_path:str, resized:bool) -> None:
+    os.remove(complete_path + "app/pygame_funcs/imagenes_editadas/imagen_partitura_modificada.png")
+
+    if resized:
+        os.remove(complete_path+"app/pygame_funcs/imagen_resized.png")
+
 def main_pygame():
 
     complete_path = find_complete_path(__file__)
     
 
-    pygame.init()
+    pygame_instance = pygame.init()
 
     running:bool = True
     RED = (255, 0, 0)
@@ -100,9 +106,11 @@ def main_pygame():
 
     img = actualizar_partitura(partitura, PATH, complete_path)
     if len(notas) == 0:
+        limpiar(complete_path, resized)
         raise ErrorPentagramas("No se han encontrado notas")
     i:int = 0
     while running:
+
         time_delta = clock.tick(60)/1000.0
         cambio = False
         cambio_posicion = False
@@ -153,14 +161,15 @@ def main_pygame():
         
         screen.fill(GRAY)
         screen.blit(img, rect)
-        posiciones = partitura.notas[i].rectangulo
+        try:
+            posiciones = partitura.notas[i].rectangulo
+        except IndexError:
+            limpiar(complete_path, resized)
+            raise ErrorPentagramas("Se han eliminado todas las notas")
         pygame.draw.rect(screen, RED, pygame.Rect(posiciones[2] - 5,posiciones[0] - 5,posiciones[3] - posiciones[2] + 10,posiciones[1] - posiciones[0] + 10), 2)
         manager.draw_ui(window_surface)
         pygame.display.update()
 
-
-
-    
 
     img_path = complete_path + "app/pygame_funcs/imagenes_editadas/" + NOMBRE_IMAGEN
     partitura.img_path = img_path
@@ -168,12 +177,8 @@ def main_pygame():
 
     pygame.image.save(img, partitura.img_path)
 
-    os.remove(complete_path + "app/pygame_funcs/imagenes_editadas/imagen_partitura_modificada.png")
-
-    if resized:
-        os.remove(complete_path+"app/pygame_funcs/imagen_resized.png")
+    limpiar(complete_path, resized)
 
     with open(complete_path + "app/notas_partituras/notas_pruebas.obj", "wb") as fh:
         pickle.dump(partitura, fh)
-
     return True

@@ -6,8 +6,9 @@ from pygame_funcs.ajustes import main_ajustes
 from pygame_funcs.instrucciones import main_instrucciones
 from musica.musica import main_musica
 from lectura_partituras.functions.functions import find_complete_path
+import time
 
-from Classes.Errors import ImageNotSelected, ErrorPentagramas, ErrorPath
+from Classes.Errors import ImageNotSelected, ErrorPentagramas, ErrorPath, ErrorGuardado
 
 def get_title(text:str, w:int, size:int = 100, font_name:str = 'microsoftjhengheimicrosoftjhengheiuibold',):
     size = 100
@@ -21,6 +22,13 @@ def get_title(text:str, w:int, size:int = 100, font_name:str = 'microsoftjhenghe
     pos_title_shadow = (pos_title[0] + shadow_offset, pos_title[1] + shadow_offset) 
 
     return title, pos_title, title_shadow, pos_title_shadow
+
+def show_error_msg(screen, error:str, width:int, font_name:str) -> None:
+    font = pygame.font.SysFont(font_name, 40)
+    pygame.draw.rect(screen, (255, 0, 0, 0.4), pygame.Rect(0, 0, width, 60))
+    print(error)
+    error_text = font.render(error, True, (0,0,0))
+    screen.blit(error_text, (width//2 - error_text.get_width()//2, 60//2 - error_text.get_height()//2))
 
 def main_menu():
     pygame.init()
@@ -45,10 +53,11 @@ def main_menu():
 
     title, pos_title, title_shadow, pos_title_shadow = get_title(title_text, w)
 
-
-    font = pygame.font.SysFont('microsoftjhengheimicrosoftjhengheiuibold', 40)
+    font_name:str = 'microsoftjhengheimicrosoftjhengheiuibold'
+    font = pygame.font.SysFont(font_name, 40)
 
     while running:
+        error_happened:bool = False
         pygame.display.set_caption("Menú Lectura Partituras")
         clock.tick(60)/1000.0
         
@@ -58,35 +67,52 @@ def main_menu():
         button_options:b.Button = b.Button(x2, 350, buttons_width, buttons_height, 'AJUSTES', font, main_ajustes)
         button_instructions:b.Button = b.Button(x1, 430, buttons_width, buttons_height, 'INSTRUCCIONES', font, lambda: main_instrucciones(buttons_width, buttons_height, font))
         button_quit:b.Button = b.Button(x2, 430, buttons_width, buttons_height, 'QUIT', font, lambda: False)
-
+        
         buttons = [button_options, button_lectura, button_music, button_edit, button_instructions, button_quit]
-
-
+        
+        
         screen = pygame.display.set_mode((w, h))
         screen.blit(bg, (0, 0))
         screen.blit(title_shadow, pos_title_shadow)
         screen.blit(title, pos_title)
-
+        
         for button in buttons:
             try:
                 running = button.process(screen)
                 
             except ImageNotSelected as e:
-                print(e)
+                error_happened = True
+                error_msg = str(e)
             except pygame.error as e:
-                print(e)
+                error_happened = True
+                error_msg = str(e)
             except ErrorPentagramas as e:
-                print(e)
-                running = True
+                error_happened = True
+                error_msg = str(e)
+                pygame.display.update()
             except FileNotFoundError as e:
-                print(e)
+                error_happened = True
+                error_msg = str(e)
             except ErrorPath as e:
-                print(e)
-
+                error_happened = True
+                error_msg = str(e)
+            except ErrorGuardado as e:
+                error_happened = True
+                error_msg = str(e)
+        
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
         
         pygame.display.update()
-
+        if error_happened:
+            screen = pygame.display.set_mode((w, h))
+            screen.blit(bg, (0, 0))
+            screen.blit(title_shadow, pos_title_shadow)
+            screen.blit(title, pos_title)
+            for button in buttons:
+                button.render(screen)
+            show_error_msg(screen, error_msg, w, font_name)
+            pygame.display.update()
+            time.sleep(1)
     pygame.quit()

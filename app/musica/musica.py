@@ -5,6 +5,7 @@ import pickle
 import time
 from lectura_partituras.functions.functions import find_complete_path, get_ajustes
 from Classes.Ajustes import Ajustes
+from Classes.Errors import ErrorGuardado
 
 def frecuencia(nota:int, octava:int) -> float:
     """
@@ -33,9 +34,10 @@ def main_musica():
     
     RED = (255, 0, 0)
     GRAY = (150, 150, 150)
-
-    img = pygame.image.load(partitura.img_path)
-
+    try:
+        img = pygame.image.load(partitura.img_path)
+    except AttributeError:
+        raise ErrorGuardado("No se ha guardado la partitura correctamente, por favor, vuelve a leerla")
 
     w, h = img.get_size()
 
@@ -64,7 +66,7 @@ def main_musica():
         if nota.nota == "Silencio":
             silencio = SILENCIOS.get(nota.figura, 1) * 60 / AJUSTES.TEMPO_PARTITURA
             time.sleep(silencio)
-        elif nota.nota != "Clave de sol" and nota.nota != "Otra figura":
+        elif nota.nota != "Clave de sol" and nota.nota != "Otra figura" and nota.nota != "Armadura":
             frec = frecuencia(NOTAS_MUSICALES[nota.nota] + ALTERACIONES[nota.alteracion], nota.octava)   
             if nota.figura.lower() == "negra":
                 duracion = 0.5

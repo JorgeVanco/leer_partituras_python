@@ -7,7 +7,8 @@ def file_browser() -> str:
     Abre la ventana del explorador de archivos para que el usuario pueda
     elegir la imagen de la partitura que quiere leer
 
-    returns: path (str) : La ruta a la imagen de la partitura elegida
+    Returns:
+        path (str) : La ruta a la imagen de la partitura elegida
     """
     try:
         top = tk.Tk()

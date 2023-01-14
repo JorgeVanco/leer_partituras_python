@@ -10,79 +10,18 @@ from Classes.Ajustes import Ajustes
 import pickle
 import os
 
+def guardar_partitura_analizada(notas:list, corte_pentagramas:list, path:str, resized:bool, fraccion:float) -> None:
+    """
+    Guarda todo lo obtenido por el análisis en ficheros de bytes
 
-def main_lectura_partituras():
-    # Se abre un menú para elegir la imagen
-    try:
-        path = file_browser()
-        
-        if path:
-            img = cv.imread(path)
-        else:
-            img = None
-        if img is None:
-            raise ImageNotSelected("Could not read the image.")
-    except cv.error:
-        raise ImageNotSelected("No image selected")
-    except ErrorPath as e:
-        raise ErrorPath(e)
+    Args:
+        notas (list): La lista de notas
+        corte_pentagramas (list[tuple]): lista con la posición inicial y final para cada corte en la imagen
+        path (str) : La ruta a la imagen de la partitura elegida
+        resized (bool): Si la partitura ha sido cambiada de tamaño o no
+        fraccion (float): La fracción con la que ha sido cambiada de tamaño
+    """
     complete_path = f.find_complete_path(__file__)
-
-    img = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
-
-    AJUSTES:Ajustes = f.get_ajustes()
-
-    UMBRAL_NEGRO: int = AJUSTES.UMBRAL_NEGRO  # considero negro cualquier valor menor que 140
-    FRACCION_MINIMA_PIXELES_NEGROS: float = AJUSTES.FRACCION_MINIMA_PIXELES_NEGROS
-    SIZE_PENTAGRAMA_IDEAL:int = AJUSTES.SIZE_PENTAGRAMA_IDEAL
-    notas: list = []
-    partitura_fina:bool = False
-
-    pentagramas, corte_pentagramas, distancia, grosor = encontrar_pentagramas(
-        img, UMBRAL_NEGRO, FRACCION_MINIMA_PIXELES_NEGROS)
-
-    if not pentagramas:
-        raise ErrorPentagramas("No se han encontrado pentagramas, compruebe los ajustes")
-
-    resized = False
-    fraccion = 1
-    if AJUSTES.CAMBIAR_SIZE and pentagramas[0][-1] - pentagramas[0][0] != SIZE_PENTAGRAMA_IDEAL:
-        fraccion = SIZE_PENTAGRAMA_IDEAL / (pentagramas[0][-1] - pentagramas[0][0])
-        if fraccion > 1.5:
-            partitura_fina = True
-
-        img = f.resize_image(fraccion, img)
-        img = f.limpiar_img(UMBRAL_NEGRO, img)
-        pentagramas, corte_pentagramas, distancia, grosor = encontrar_pentagramas(
-            img, UMBRAL_NEGRO, FRACCION_MINIMA_PIXELES_NEGROS)
-        resized = True
-
-    if not pentagramas:
-        raise ErrorPentagramas("No se han encontrado pentagramas, compruebe los ajustes")
-
-    PUNTOS_MEDIO = []
-    for index_pentagrama in range(len(corte_pentagramas)):
-        
-        imagen_para_recorrer, desfase = f.calcular_imagen_a_recorrer_y_desfase(img, pentagramas,index_pentagrama, corte_pentagramas, distancia)
-        
-        figuras_en_pentagrama = recorrer_pentagrama(imagen_para_recorrer, distancia, UMBRAL_NEGRO, grosor, pentagramas[index_pentagrama], partitura_fina, AJUSTES.DETECTAR_CORCHEAS, AJUSTES.PORCENTAJE_DETECTAR_NOTA)
-        
-        count = 0
-        for figura, posiciones, posiciones_rectangulo in figuras_en_pentagrama:
-            
-            # Sumar desfase por distinto pentagrama
-            posiciones = f.sumar_desfase(posiciones, desfase)
-            posiciones_rectangulo = f.sumar_desfase(posiciones_rectangulo, desfase)
-            
-            nota = diferenciar_figuras(
-                figura, posiciones, posiciones_rectangulo, pentagramas[index_pentagrama], distancia, UMBRAL_NEGRO, AJUSTES.PORCENTAJE_DIFERENCIAR_NEGRA_BLANCA)
-            notas.append(nota)
-            
-            punto_medio = posiciones[0] + (posiciones[1] - posiciones[0]) // 2
-            PUNTOS_MEDIO.append((posiciones[2], punto_medio))
-            
-            count += 1
-
     try:
         with open(complete_path + "app/notas_partituras/notas_pruebas.obj", "wb") as fh:
             pickle.dump(notas, fh)
@@ -99,10 +38,78 @@ def main_lectura_partituras():
         pickle.dump(resized, fh)
         pickle.dump(fraccion, fh)
 
+def main_lectura_partituras() -> bool:
+    """
+    La lógica de la lectura de partituras.
+
+    Se pide al usuario elegir una imagen.
+    Se analiza la partitura y se guardan los resultados.
+    Se llama a la edición de la partitura.
+
+    Returns:
+        True: Para que el programa continue
+    """
+    # Se abre un menú para elegir la imagen
+    try:
+        path = file_browser()
+        
+        if path:
+            img = cv.imread(path)
+        else:
+            img = None
+        if img is None:
+            raise ImageNotSelected("Could not read the image.")
+    except cv.error:
+        raise ImageNotSelected("No image selected")
+    except ErrorPath as e:
+        raise ErrorPath(e)
+
+    
+    # Se cambia la imagen a blanco y negro
+    img = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
+
+    # Se cargan los ajustes
+    AJUSTES:Ajustes = f.get_ajustes()
+
+    # Busca los pentagramas en la imagen
+    pentagramas, corte_pentagramas, distancia, grosor = encontrar_pentagramas(
+        img, AJUSTES.UMBRAL_NEGRO, AJUSTES.FRACCION_MINIMA_PIXELES_NEGROS)
+
+    # Cambia el tamaño de la partitura para que sea del mejor tamaño posible para hacer el análisis
+    resized = False
+    fraccion = 1
+    if AJUSTES.CAMBIAR_SIZE and pentagramas and pentagramas[0][-1] - pentagramas[0][0] != AJUSTES.SIZE_PENTAGRAMA_IDEAL:
+        fraccion = AJUSTES.SIZE_PENTAGRAMA_IDEAL / (pentagramas[0][-1] - pentagramas[0][0])
+
+        img = f.resize_image(fraccion, img)
+        img = f.limpiar_img(AJUSTES.UMBRAL_NEGRO, img)
+        pentagramas, corte_pentagramas, distancia, grosor = encontrar_pentagramas(
+            img, AJUSTES.UMBRAL_NEGRO, AJUSTES.FRACCION_MINIMA_PIXELES_NEGROS)
+        resized = True
+
+    if not pentagramas:
+        raise ErrorPentagramas("No se han encontrado pentagramas, compruebe los ajustes")
+
+    notas: list = []
+    for index_pentagrama in range(len(corte_pentagramas)):
+        
+        imagen_para_recorrer, desfase = f.calcular_imagen_a_recorrer_y_desfase(img, pentagramas,index_pentagrama, corte_pentagramas, distancia)
+        
+        figuras_en_pentagrama = recorrer_pentagrama(imagen_para_recorrer, distancia, AJUSTES.UMBRAL_NEGRO, grosor, pentagramas[index_pentagrama], AJUSTES.DETECTAR_CORCHEAS, AJUSTES.PORCENTAJE_DETECTAR_NOTA)
+        
+        for figura, posiciones, posiciones_rectangulo in figuras_en_pentagrama:
+            
+            # Sumar desfase por distinto pentagrama
+            posiciones = f.sumar_desfase(posiciones, desfase)
+            posiciones_rectangulo = f.sumar_desfase(posiciones_rectangulo, desfase)
+            
+            nota = diferenciar_figuras(
+                figura, posiciones, posiciones_rectangulo, pentagramas[index_pentagrama], distancia, AJUSTES.UMBRAL_NEGRO, AJUSTES.PORCENTAJE_DIFERENCIAR_NEGRA_BLANCA)
+            notas.append(nota)
+
+
+    guardar_partitura_analizada(notas, corte_pentagramas, path, resized, fraccion)
+
     main_edicion_partituras()
 
     return True
-
-# intentar analizar las figuras a la vez que las voy buscando
-# clave de sol, silencios,... por altura y anchura
-# Resizing

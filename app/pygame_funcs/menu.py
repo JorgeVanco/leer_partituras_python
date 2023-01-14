@@ -76,7 +76,10 @@ def main_menu() -> None:
         screen.blit(title_shadow, pos_title_shadow)
         screen.blit(title, pos_title)
         
-        for button in buttons:
+        # for button in buttons:
+        i:int = 0
+        while i < len(buttons) and running:
+            button = buttons[i]
             try:
                 running = button.process(screen)
                 
@@ -99,6 +102,8 @@ def main_menu() -> None:
             except ErrorGuardado as e:
                 error_happened = True
                 error_msg = str(e)
+            
+            i += 1
         
         for event in pygame.event.get():
             if event.type == pygame.QUIT:

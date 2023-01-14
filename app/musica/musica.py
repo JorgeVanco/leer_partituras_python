@@ -43,6 +43,9 @@ def get_duracion(nota:Nota, TEMPO_PARTITURA:int) -> float:
 def main_musica() -> bool:
     """
     Toca la canción a la vez que muestra la nota que está sonando a tiempo real
+
+    Returns:
+        True: Para que el programa siga corriendo
     """
 
     NOTAS_MUSICALES = {"Do":1, "Re":3, "Mi":5, "Fa":6, "Sol":8, "La":10, "Si":12}
@@ -109,3 +112,5 @@ def main_musica() -> bool:
             time.sleep(0.1)  # Para que no suenen juntas dos notas iguales
 
         i += 1
+
+    return True

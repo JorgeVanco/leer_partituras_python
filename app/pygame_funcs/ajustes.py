@@ -120,6 +120,9 @@ def draw_menu(menu, screen, AJUSTES:Ajustes, AJUSTES_DEFAULT:Ajustes, complete_p
 def main_ajustes() -> bool:
     """
     La lógica del menú de ajustes
+
+    Returns:
+        True: Para que el programa siga corriendo
     """
     complete_path: str = find_complete_path(__file__)
 
@@ -142,3 +145,5 @@ def main_ajustes() -> bool:
     draw_menu(menu, screen, AJUSTES, AJUSTES_DEFAULT, complete_path)
 
     menu.mainloop(screen)
+
+    return True

@@ -116,7 +116,13 @@ def limpiar_img(UMBRAL_NEGRO:int, img:list) -> list:
                 img[i,j] = 255
     return img
 
-def get_ajustes():
+def get_ajustes() -> Ajustes:
+    """
+    Carga los ajustes guardados en ajustes.obj
+
+    Returns:
+        AJUSTES (Ajustes): Los ajustes
+    """
     complete_path = find_complete_path(__file__)
     try:
         with open(complete_path + "app/ajustes/ajustes.obj", "rb") as fh:

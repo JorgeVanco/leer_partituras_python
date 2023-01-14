@@ -10,3 +10,4 @@ imagenes_editadas
 partes_imagenes.obj
 .vscode
 app/ajustes
+app/pygame_funcs/imagenes_editadas

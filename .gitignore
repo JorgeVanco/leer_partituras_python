@@ -6,8 +6,7 @@ imagenes
 venv
 notas_partituras
 figuras.obj
-.ipynb_checkpoints
-ajustes
 imagenes_editadas
 partes_imagenes.obj
-ajustes.obj
+.vscode
+app/ajustes

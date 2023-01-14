@@ -57,12 +57,9 @@ def limpiar(complete_path:str, resized:bool) -> None:
     if resized:
         os.remove(complete_path+"app/pygame_funcs/imagen_resized.png")
 
-def main_pygame():
+def main_edicion_partituras():
 
     complete_path = find_complete_path(__file__)
-    
-
-    pygame_instance = pygame.init()
 
     running:bool = True
     RED = (255, 0, 0)
@@ -84,7 +81,7 @@ def main_pygame():
     if resized:
         img = cv.imread(PATH)
         img = resize_image(fraccion, img)
-        cv.imwrite(complete_path+"app/pygame_funcs/imagen_resized.png", img)
+        cv.imwrite(complete_path + "app/pygame_funcs/imagen_resized.png", img)
         PATH = complete_path + "app/pygame_funcs/imagen_resized.png"
         img = pygame.image.load(complete_path+"app/pygame_funcs/imagen_resized.png")
         

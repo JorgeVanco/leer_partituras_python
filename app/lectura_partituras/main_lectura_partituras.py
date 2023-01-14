@@ -4,7 +4,7 @@ from lectura_partituras.functions.encontrar_pentagramas import encontrar_pentagr
 from lectura_partituras.functions.recorrer_pentagrama import recorrer_pentagrama
 from lectura_partituras.functions.diferenciar_figuras import diferenciar_figuras
 import lectura_partituras.functions.functions as f
-from pygame_funcs.main_pygame import main_pygame
+from pygame_funcs.main_edicion_partituras import main_edicion_partituras
 from Classes.Errors import ImageNotSelected, ErrorPentagramas, ErrorPath
 from Classes.Ajustes import Ajustes
 import pickle
@@ -29,7 +29,6 @@ def main_lectura_partituras():
     complete_path = f.find_complete_path(__file__)
 
     img = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
-    # PARAMETROS
 
     AJUSTES:Ajustes = f.get_ajustes()
 
@@ -100,7 +99,7 @@ def main_lectura_partituras():
         pickle.dump(resized, fh)
         pickle.dump(fraccion, fh)
 
-    main_pygame()
+    main_edicion_partituras()
 
     return True
 

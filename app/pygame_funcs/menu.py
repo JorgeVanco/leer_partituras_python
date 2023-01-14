@@ -1,6 +1,6 @@
 import pygame
 import pygame_funcs.Buttons.Button as b
-from pygame_funcs.main_pygame import main_pygame
+from pygame_funcs.main_edicion_partituras import main_edicion_partituras
 from lectura_partituras.main_lectura_partituras import main_lectura_partituras
 from pygame_funcs.ajustes import main_ajustes
 from pygame_funcs.instrucciones import main_instrucciones
@@ -62,7 +62,7 @@ def main_menu():
         clock.tick(60)/1000.0
         
         button_lectura:b.Button = b.Button(x1, 270, buttons_width, buttons_height, 'LEER PARTITURA', font, main_lectura_partituras)
-        button_edit:b.Button = b.Button(x2, 270, buttons_width, buttons_height, "EDITAR PARTITURA", font, main_pygame)
+        button_edit:b.Button = b.Button(x2, 270, buttons_width, buttons_height, "EDITAR PARTITURA", font, main_edicion_partituras)
         button_music:b.Button = b.Button(x1, 350, buttons_width, buttons_height, "TOCAR MÚSICA", font, main_musica)
         button_options:b.Button = b.Button(x2, 350, buttons_width, buttons_height, 'AJUSTES', font, main_ajustes)
         button_instructions:b.Button = b.Button(x1, 430, buttons_width, buttons_height, 'INSTRUCCIONES', font, lambda: main_instrucciones(buttons_width, buttons_height, font))

@@ -1,7 +1,4 @@
-import sys
-from pathlib import Path
-sys.path.append(str(Path('.').absolute()))
-from app.lectura_partituras.functions.functions import get_nombre_fichero, find_complete_path, sumar_desfase
+from lectura_partituras.functions.functions import get_nombre_fichero, find_complete_path, sumar_desfase
 
 COLOR_VERDE = "\033[1;32m"
 COLOR_ROJO = "\033[1;31m"
@@ -57,7 +54,6 @@ def test_sumar_desfase():
         ok()
     else:
         error()
-        
 
 
 if __name__ == "__main__":

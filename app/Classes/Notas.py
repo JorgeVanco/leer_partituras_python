@@ -13,7 +13,7 @@ class Nota:
         self.pentagrama = pentagrama
 
 class Partitura:
-    def __init__(self, posiciones_pentagramas:list, notas:list, nombre:str, path_img_original:str, resized:bool, fraccion:float) -> None:
+    def __init__(self, posiciones_pentagramas:list, notas:list, nombre:str, path_img_original:str, resized:bool, fraccion:float, img_path:str = None) -> None:
         self.notas = notas
         self.posiciones_pentagramas = posiciones_pentagramas
         self.pentagramas = None
@@ -21,6 +21,11 @@ class Partitura:
         self.path_img_original = path_img_original
         self.resized = resized
         self.fraccion = fraccion
+
+        if not img_path:
+            self.img_path = self.path_img_original
+        else:
+            self.img_path = img_path
 
         self.asignar_notas_a_pentagrama()
 

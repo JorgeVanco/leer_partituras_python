@@ -49,7 +49,7 @@ def show_error_msg(screen, error:str, width:int, font_name:str) -> None:
     """
     font = pygame.font.SysFont(font_name, 40)
     pygame.draw.rect(screen, (255, 0, 0, 0.4), pygame.Rect(0, 0, width, 60))
-    print(error)
+
     error_text = font.render(error, True, (0,0,0))
     screen.blit(error_text, (width//2 - error_text.get_width()//2, 60//2 - error_text.get_height()//2))
 

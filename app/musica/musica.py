@@ -4,6 +4,7 @@ import pygame
 import pickle
 import time
 from lectura_partituras.functions.functions import find_complete_path, get_ajustes
+from pygame_funcs.pop_up.select_partitura import elegir_partitura
 from Classes.Ajustes import Ajustes
 from Classes.Notas import Nota, Partitura
 from Classes.Errors import ErrorGuardado
@@ -61,7 +62,8 @@ def main_musica() -> bool:
     except FileNotFoundError:
         raise FileNotFoundError("No se ha leído ninguna partitura todavía")
 
-    partitura:Partitura = partituras_existentes[-1]
+    INDICE_PARTITURA:int = elegir_partitura(partituras_existentes)
+    partitura:Partitura = partituras_existentes[INDICE_PARTITURA]
 
     AJUSTES:Ajustes = get_ajustes()
     

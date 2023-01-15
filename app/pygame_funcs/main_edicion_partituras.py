@@ -6,6 +6,7 @@ from lectura_partituras.functions.functions import find_complete_path, get_nombr
 import os
 import cv2 as cv
 from Classes.Errors import ErrorPentagramas
+from pygame_funcs.pop_up.select_partitura import elegir_partitura
 
 def get_notas_afectadas_por_armadura(armadura:Nota, ORDEN_SOSTENIDOS_ARMADURA:list[str], ORDEN_BEMOLES_ARMADURA:list[str]) -> list[str]:
     """
@@ -128,8 +129,9 @@ def main_edicion_partituras() -> bool:
             partituras_existentes:list[Partitura] = pickle.load(fh)
     except FileNotFoundError:
         raise FileNotFoundError("No se ha leído ninguna partitura todavía")
-    print(partituras_existentes)
-    partitura:Partitura = partituras_existentes[-1]
+
+    INDICE_PARTITURA = elegir_partitura(partituras_existentes)
+    partitura:Partitura = partituras_existentes[INDICE_PARTITURA]
 
     PATH = partitura.path_img_original
     NOMBRE_IMAGEN = get_nombre_fichero(PATH)
@@ -228,5 +230,6 @@ def main_edicion_partituras() -> bool:
 
     with open(complete_path + "app/notas_partituras/partituras_guardadas.obj", "wb") as fh:
         partituras_existentes[:-1].append(partitura)
+        partituras_existentes = partituras_existentes[:INDICE_PARTITURA] + [partitura] + partituras_existentes[INDICE_PARTITURA + 1:]
         pickle.dump(partituras_existentes, fh)
     return True

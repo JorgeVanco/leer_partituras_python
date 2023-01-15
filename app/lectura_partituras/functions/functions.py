@@ -56,12 +56,11 @@ def resize_image(fraccion:float, img:list) -> list:
     Returns:
         img (list): La imagen redimensionada
     """
-    print("Resizing...")
+
     w, h = img.shape[:2]
-    print(w, h, end=" -> ")
     w = int(np.round(fraccion * w))
     h = int(np.round(fraccion * h))
-    print(w, h)
+
     return cv.resize(img, (h, w))
 
 def find_complete_path(file) -> str:

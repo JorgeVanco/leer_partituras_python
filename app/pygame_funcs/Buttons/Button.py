@@ -1,5 +1,5 @@
 import pygame
-from Classes.Errors import ImageNotSelected, ErrorPentagramas, ErrorPath
+from Classes.Errors import ImageNotSelected, ErrorPentagramas, ErrorPath, ErrorGuardado
 
 class Button:
     def __init__(self, x:int, y:int, width:int, height:int, button_text: str, font, onclickFunction) -> None:
@@ -52,7 +52,7 @@ class Button:
         if self.button_rect.collidepoint(mousePos):
             self.button_surface.fill(self.fill_colors['hover'])
             
-            if pygame.mouse.get_pressed(num_buttons=3)[0]:
+            if pygame.mouse.get_pressed()[0]:
                 self.button_surface.fill(self.fill_colors['pressed'])
                 try:
                     running = self.onclickFunction()
@@ -66,6 +66,8 @@ class Button:
                     raise FileNotFoundError(e)
                 except ErrorPath as e:
                     raise ErrorPath(e)
+                except ErrorGuardado as e:
+                    raise ErrorGuardado(e)
         
         self.render(screen)
         

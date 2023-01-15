@@ -7,10 +7,11 @@ import lectura_partituras.functions.functions as f
 from pygame_funcs.main_edicion_partituras import main_edicion_partituras
 from Classes.Errors import ImageNotSelected, ErrorPentagramas, ErrorPath
 from Classes.Ajustes import Ajustes
+from Classes.Notas import Partitura
 import pickle
 import os
 
-def guardar_partitura_analizada(notas:list, corte_pentagramas:list, path:str, resized:bool, fraccion:float) -> None:
+def guardar_partitura_analizada(partitura:Partitura) -> None:
     """
     Guarda todo lo obtenido por el análisis en ficheros de bytes
 
@@ -24,19 +25,15 @@ def guardar_partitura_analizada(notas:list, corte_pentagramas:list, path:str, re
     complete_path = f.find_complete_path(__file__)
     try:
         with open(complete_path + "app/notas_partituras/notas_pruebas.obj", "wb") as fh:
-            pickle.dump(notas, fh)
+            pickle.dump(partitura.notas, fh)
     except FileNotFoundError:
         os.mkdir(complete_path + "app/notas_partituras")
         with open(complete_path + "app/notas_partituras/notas_pruebas.obj", "wb") as fh:
-            pickle.dump(notas, fh)
+            pickle.dump(partitura.notas, fh)
 
 
     with open(complete_path + "app/pygame_funcs/partes_imagenes.obj", "wb") as fh:
-        pickle.dump(notas, fh)
-        pickle.dump(corte_pentagramas, fh)
-        pickle.dump(path, fh)
-        pickle.dump(resized, fh)
-        pickle.dump(fraccion, fh)
+        pickle.dump(partitura, fh)
 
 def main_lectura_partituras() -> bool:
     """
@@ -107,9 +104,13 @@ def main_lectura_partituras() -> bool:
                 figura, posiciones, posiciones_rectangulo, pentagramas[index_pentagrama], distancia, AJUSTES.UMBRAL_NEGRO, AJUSTES.PORCENTAJE_DIFERENCIAR_NEGRA_BLANCA)
             notas.append(nota)
 
+    NOMBRE_IMAGEN = f.get_nombre_fichero(path)
+    NOMBRE_PARTITURA = NOMBRE_IMAGEN[:NOMBRE_IMAGEN.find(".")]
+    partitura:Partitura = Partitura(corte_pentagramas, notas, NOMBRE_PARTITURA, path, resized, fraccion)
+    guardar_partitura_analizada(partitura)
 
-    guardar_partitura_analizada(notas, corte_pentagramas, path, resized, fraccion)
-
+    
     main_edicion_partituras()
+
 
     return True

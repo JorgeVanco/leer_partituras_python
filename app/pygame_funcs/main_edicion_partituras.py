@@ -125,20 +125,17 @@ def main_edicion_partituras() -> bool:
 
     # Carga los datos de la partitura
     with open(complete_path + "app/pygame_funcs/partes_imagenes.obj", "rb") as fh:
-        notas = pickle.load(fh)
-        posiciones_pentagramas = pickle.load(fh)
-        PATH = pickle.load(fh)
-        resized = pickle.load(fh)
-        fraccion = pickle.load(fh)
+        partitura:Partitura = pickle.load(fh)
     
+    PATH = partitura.path_img_original
     NOMBRE_IMAGEN = get_nombre_fichero(PATH)
-    NOMBRE_PARTITURA = NOMBRE_IMAGEN[:NOMBRE_IMAGEN.find(".")]
+
     img = pygame.image.load(PATH)
 
-    if resized:
+    if partitura.resized:
         # Crea una nueva imagen con el nuevo tamaño
         img = cv.imread(PATH)
-        img = resize_image(fraccion, img)
+        img = resize_image(partitura.fraccion, img)
         cv.imwrite(complete_path + "app/pygame_funcs/imagen_resized.png", img)
         PATH = complete_path + "app/pygame_funcs/imagen_resized.png"
         img = pygame.image.load(complete_path+"app/pygame_funcs/imagen_resized.png")
@@ -148,16 +145,14 @@ def main_edicion_partituras() -> bool:
     rect = img.get_rect()
 
     screen = pygame.display.set_mode((w, h))
-    pygame.display.set_caption(NOMBRE_PARTITURA)
+    pygame.display.set_caption(partitura.nombre)
 
-
-    partitura = Partitura(posiciones_pentagramas, notas, NOMBRE_PARTITURA)
     clock = pygame.time.Clock()
 
     img = actualizar_partitura(partitura, PATH, complete_path, ORDEN_SOSTENIDOS_ARMADURA, ORDEN_BEMOLES_ARMADURA, SIMBOLOS_ALTERACIONES)
     
-    if len(notas) == 0:
-        limpiar(complete_path, resized)
+    if len(partitura.notas) == 0:
+        limpiar(complete_path, partitura.resized)
         raise ErrorPentagramas("No se han encontrado notas")
 
     i:int = 0  # Índice de la nota en la lita de notas de la partitura
@@ -181,7 +176,6 @@ def main_edicion_partituras() -> bool:
                     
                 else:
                     cambio = pop.open_popup(partitura, i)
-                    
 
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT:
@@ -207,18 +201,18 @@ def main_edicion_partituras() -> bool:
                 
             if cambio:  # Acrualiza la partitura
                 img = actualizar_partitura(partitura, PATH, complete_path, ORDEN_SOSTENIDOS_ARMADURA, ORDEN_BEMOLES_ARMADURA, SIMBOLOS_ALTERACIONES)
-        
+
         screen.fill(GRAY)
         screen.blit(img, rect)
 
         try:
             posiciones = partitura.notas[i].rectangulo
         except IndexError:
-            limpiar(complete_path, resized)
+            limpiar(complete_path, partitura.resized)
             raise ErrorPentagramas("Se han eliminado todas las notas")
 
         pygame.draw.rect(screen, RED, pygame.Rect(posiciones[2] - 5,posiciones[0] - 5,posiciones[3] - posiciones[2] + 10,posiciones[1] - posiciones[0] + 10), 2)
-        
+
         pygame.display.update()
 
 
@@ -226,7 +220,7 @@ def main_edicion_partituras() -> bool:
 
     pygame.image.save(img, partitura.img_path)
 
-    limpiar(complete_path, resized)
+    limpiar(complete_path, partitura.resized)
 
     with open(complete_path + "app/notas_partituras/notas_pruebas.obj", "wb") as fh:
         pickle.dump(partitura, fh)

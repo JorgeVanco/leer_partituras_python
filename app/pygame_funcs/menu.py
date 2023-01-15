@@ -24,6 +24,9 @@ def get_title(text:str, w:int, size:int = 100, font_name:str = 'microsoftjhenghe
     return title, pos_title, title_shadow, pos_title_shadow
 
 def show_error_msg(screen, error:str, width:int, font_name:str) -> None:
+    """
+    
+    """
     font = pygame.font.SysFont(font_name, 40)
     pygame.draw.rect(screen, (255, 0, 0, 0.4), pygame.Rect(0, 0, width, 60))
     print(error)

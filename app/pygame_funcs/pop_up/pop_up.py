@@ -47,6 +47,20 @@ def set_nota(root:tk.Tk, partitura:Partitura, pentagrama:Pentagrama, POSIBILIDAD
         POSIBILIDADES_OCTAVAS_REVERSE = {v:k for k,v in POSIBILIDADES["OCTAVAS"].items()}
         value = POSIBILIDADES_OCTAVAS_REVERSE[value]
     pentagrama.cambiar_nota(nota, atributo, value)
+    if atributo == "nota":
+        if nota.nota in POSIBILIDADES["NOTAS_POSIBLES"][:7] and nota.figura not in POSIBILIDADES["FIGURAS_POSIBLES"]:
+            if nota.figura in POSIBILIDADES["SILENCIOS_POSIBLES"]:
+                pentagrama.cambiar_nota(nota, "figura", nota.figura[12:].capitalize())  # Quita 'Silendio de '
+            else:
+                pentagrama.cambiar_nota(nota, "figura", "Negra")
+        elif nota.nota == "Silencio" and nota.figura not in POSIBILIDADES["SILENCIOS_POSIBLES"]:
+            print(nota.nota, nota.figura)
+            if nota.figura in POSIBILIDADES["FIGURAS_POSIBLES"]:
+                pentagrama.cambiar_nota(nota, "figura", "Silencio de " + nota.figura.lower())
+            else:
+                pentagrama.cambiar_nota(nota, "figura", "Silencio de negra")
+
+        
     draw(root, partitura, POSIBILIDADES, index)
 
 def draw(root:tk.Tk, partitura:Partitura, POSIBILIDADES:dict, index:int) -> None:

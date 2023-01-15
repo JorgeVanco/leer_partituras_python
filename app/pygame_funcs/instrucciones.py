@@ -54,7 +54,7 @@ def main_instrucciones(buttons_width:int, height:int, font) -> bool:
     """
     pygame.init()
 
-    instrucciones:str = "Seleccione la imagen que quiere leer.\nPuede editarla seleccionando una nota particular. Ya sea mediante las flechas del teclado o el ratón y presionando 'Enter' o click derecho en el ratón.\nEn 'Tocar música' sonará la partitura que acabas de editar.\nEn ajustes tienes todos los parámetros más relevantes para modificar el resultado de la lectura de la partirura, así como la velocidad a la que quieres que suene la partitura."
+    instrucciones:str = "Seleccione la imagen que quiere leer.\nPuede editarla seleccionando una nota particular. Ya sea mediante las flechas del teclado o el ratón y presionando 'Enter' o click derecho en el ratón.\nEn 'Tocar música' sonará la partitura que elijas.\nEn ajustes tienes todos los parámetros más relevantes para modificar el resultado de la lectura de la partirura, así como la velocidad a la que quieres que suene la partitura."
     
     running = True
     w = 1024

@@ -24,12 +24,15 @@ def guardar_partitura_analizada(partitura:Partitura) -> None:
     """
     complete_path = f.find_complete_path(__file__)
     try:
+        with open(complete_path + "app/notas_partituras/partituras_guardadas.obj", "rb") as fh:
+            partituras_existentes:list = pickle.load(fh)
+        partituras_existentes.append(partitura)
         with open(complete_path + "app/notas_partituras/partituras_guardadas.obj", "wb") as fh:
-            pickle.dump(partitura, fh)
+            pickle.dump(partituras_existentes, fh)
     except FileNotFoundError:
         os.mkdir(complete_path + "app/notas_partituras")
         with open(complete_path + "app/notas_partituras/partituras_guardadas.obj", "wb") as fh:
-            pickle.dump(partitura, fh)
+            pickle.dump([partitura], fh)
 
 def main_lectura_partituras() -> bool:
     """

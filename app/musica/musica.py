@@ -5,7 +5,7 @@ import pickle
 import time
 from lectura_partituras.functions.functions import find_complete_path, get_ajustes
 from Classes.Ajustes import Ajustes
-from Classes.Notas import Nota
+from Classes.Notas import Nota, Partitura
 from Classes.Errors import ErrorGuardado
 
 def frecuencia(nota:int, octava:int) -> float:
@@ -57,9 +57,11 @@ def main_musica() -> bool:
 
     try:
         with open(complete_path + "app/notas_partituras/partituras_guardadas.obj", "rb") as fh:
-            partitura = pickle.load(fh)
+            partituras_existentes:list[Partitura] = pickle.load(fh)
     except FileNotFoundError:
         raise FileNotFoundError("No se ha leído ninguna partitura todavía")
+
+    partitura:Partitura = partituras_existentes[-1]
 
     AJUSTES:Ajustes = get_ajustes()
     

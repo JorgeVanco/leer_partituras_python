@@ -123,9 +123,14 @@ def main_edicion_partituras() -> bool:
     GRAY = (150, 150, 150)
 
     # Carga los datos de la partitura
-    with open(complete_path + "app/notas_partituras/partituras_guardadas.obj", "rb") as fh:
-        partitura:Partitura = pickle.load(fh)
-    
+    try:
+        with open(complete_path + "app/notas_partituras/partituras_guardadas.obj", "rb") as fh:
+            partituras_existentes:list[Partitura] = pickle.load(fh)
+    except FileNotFoundError:
+        raise FileNotFoundError("No se ha leído ninguna partitura todavía")
+    print(partituras_existentes)
+    partitura:Partitura = partituras_existentes[-1]
+
     PATH = partitura.path_img_original
     NOMBRE_IMAGEN = get_nombre_fichero(PATH)
 
@@ -222,5 +227,6 @@ def main_edicion_partituras() -> bool:
     limpiar(complete_path, partitura.resized)
 
     with open(complete_path + "app/notas_partituras/partituras_guardadas.obj", "wb") as fh:
-        pickle.dump(partitura, fh)
+        partituras_existentes[:-1].append(partitura)
+        pickle.dump(partituras_existentes, fh)
     return True

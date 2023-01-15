@@ -2,7 +2,8 @@ import pickle
 import pygame
 from pygame_funcs.pop_up import pop_up as pop
 from Classes.Notas import Partitura, Nota
-from lectura_partituras.functions.functions import find_complete_path, get_nombre_fichero, resize_image
+from Classes.Ajustes import Ajustes
+from lectura_partituras.functions.functions import find_complete_path, get_nombre_fichero, resize_image, get_ajustes
 import os
 import cv2 as cv
 from Classes.Errors import ErrorPentagramas
@@ -62,6 +63,8 @@ def actualizar_partitura(partitura:Partitura, PATH:str, complete_path:str, ORDEN
     image_rectangulos = cv.imread(PATH)
     alteracion_armadura:str = None
     notas_afectadas_por_armadura:list = []
+
+    AJUSTES:Ajustes = get_ajustes()
     
     for pentagrama in partitura.pentagramas:
         count = 0
@@ -79,7 +82,7 @@ def actualizar_partitura(partitura:Partitura, PATH:str, complete_path:str, ORDEN
                 if nota.nota not in ["Clave de sol", "Armadura", "Silencio"]:
                     set_alteracion_nota(nota, notas_afectadas_por_armadura, alteracion_armadura)
                 image_rectangulos = cv.putText(
-                    image_rectangulos, nota.nota + SIMBOLOS_ALTERACIONES[nota.alteracion] + str(nota.figura), org, cv.FONT_HERSHEY_SIMPLEX, 0.35, 0, 1, cv.LINE_AA)
+                    image_rectangulos, nota.nota + SIMBOLOS_ALTERACIONES[nota.alteracion] + str(nota.figura), org, cv.FONT_HERSHEY_SIMPLEX, AJUSTES.FONT_SIZE, 0, 1, cv.LINE_AA)
             count += 1
 
     saved_correctly = cv.imwrite(complete_path + "app/pygame_funcs/imagenes_editadas/imagen_partitura_modificada.png", image_rectangulos)

@@ -30,6 +30,8 @@ def set_ajustes(value, ajuste:str, AJUSTES:Ajustes) -> None:
         AJUSTES.FRACCION_MINIMA_PIXELES_NEGROS = float(np.round(value, 3))
     elif ajuste == "tempo_partitura":
         AJUSTES.TEMPO_PARTITURA = int(value)
+    elif ajuste == "font_size":
+        AJUSTES.FONT_SIZE = float(np.round(value, 3))
 
 def save(AJUSTES:Ajustes, AJUSTES_DEFAULT:Ajustes, menu:pygame_menu.Menu, screen, complete_path:str) -> None:
     """
@@ -107,6 +109,9 @@ def draw_menu(menu, screen, AJUSTES:Ajustes, AJUSTES_DEFAULT:Ajustes, complete_p
                         [('No', False), ('Sí', True)], default=AJUSTES.CAMBIAR_SIZE, onchange=lambda value, boolean: set_ajustes(boolean, "cambiar_size", AJUSTES))
     menu.add.range_slider("Tempo partitura: "+str(AJUSTES.TEMPO_PARTITURA), default=AJUSTES.TEMPO_PARTITURA,
                             range_values=(40, 255), increment=1, onchange=lambda value: set_ajustes(value, "tempo_partitura", AJUSTES))
+    menu.add.range_slider("Tamaño letra en partitura: "+str(AJUSTES.FONT_SIZE), default=AJUSTES.FONT_SIZE,
+                            range_values=(0, 1), increment=0.05, onchange=lambda value: set_ajustes(value, "font_size", AJUSTES))
+
     menu.add.button("Default settings", lambda: return_to_default_settings(
         AJUSTES, AJUSTES_DEFAULT, menu, screen, complete_path))
     

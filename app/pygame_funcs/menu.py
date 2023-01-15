@@ -1,6 +1,6 @@
 import pygame
 
-def get_title(text:str, w:int, size:int = 100, font_name:str = 'microsoftjhengheimicrosoftjhengheiuibold',):
+def get_title(text:str, w:int, size:int = 100, font_name:str = 'microsoftjhengheimicrosoftjhengheiuibold'):
     """
     Genera el texto del título con una sombra para que se vea mejor
 

@@ -1,6 +1,5 @@
 import pickle
 import pygame
-import pygame_gui
 from pygame_funcs.pop_up import pop_up as pop
 from Classes.Notas import Partitura, Nota
 from lectura_partituras.functions.functions import find_complete_path, get_nombre_fichero, resize_image
@@ -199,7 +198,7 @@ def main_edicion_partituras() -> bool:
                 elif i < 0:
                     i = len(partitura.notas) - 1
                 
-            if cambio:  # Acrualiza la partitura
+            if cambio:  # Actualiza la partitura
                 img = actualizar_partitura(partitura, PATH, complete_path, ORDEN_SOSTENIDOS_ARMADURA, ORDEN_BEMOLES_ARMADURA, SIMBOLOS_ALTERACIONES)
 
         screen.fill(GRAY)

@@ -11,8 +11,22 @@ import time
 from Classes.Errors import ImageNotSelected, ErrorPentagramas, ErrorPath, ErrorGuardado
 
 def get_title(text:str, w:int, size:int = 100, font_name:str = 'microsoftjhengheimicrosoftjhengheiuibold',):
-    size = 100
-    font_title = pygame.font.SysFont(font_name, size)
+    """
+    Genera el texto del título con una sombra para que se vea mejor
+
+    Args:
+        text (str): El texto para escribir
+        w (int): La anchura de la pantalla
+        size (int): El tamaño de la letra
+        font_name (str): El nombre de la fuente
+
+    Returns:
+        title (any): El título renderizado
+        pos_title (tuple[int, int]): La posición del centro del titulo
+        title_shadow (any): La sombra del título renderizada
+        pos_title_shadow (title[int, int]): La posición del centro de la sombra del titulo
+    """
+    font_title:pygame.Surface = pygame.font.SysFont(font_name, size)
     title = font_title.render(text, True, (255,255,255))
     title_shadow = font_title.render(text, True, (0,0,0))
     title_rect = title.get_rect()
@@ -25,7 +39,13 @@ def get_title(text:str, w:int, size:int = 100, font_name:str = 'microsoftjhenghe
 
 def show_error_msg(screen, error:str, width:int, font_name:str) -> None:
     """
-    
+    Muestra un mensaje de error en la parte de arriba de la pantalla
+
+    Args:
+        screen: La pantalla de pygame
+        error (str): El mensaje de error
+        width (int): La anchura de la pantalla
+        font_name (str): El nombre de la fuente
     """
     font = pygame.font.SysFont(font_name, 40)
     pygame.draw.rect(screen, (255, 0, 0, 0.4), pygame.Rect(0, 0, width, 60))
@@ -47,8 +67,8 @@ def main_menu() -> None:
     buttons_width: int = 400
     buttons_height:int = 70
     
-    x1:int = w // 4 - buttons_width//2 + 50
-    x2: int = 3 * w//4 - buttons_width//2 - 50
+    x1:int = w // 4 - buttons_width//2 + 50  # La posición en el eje x de los botones de la izquierda
+    x2: int = 3 * w//4 - buttons_width//2 - 50  # La posición en el eje x de los botones de la derecha
 
     clock = pygame.time.Clock()
 
@@ -58,20 +78,20 @@ def main_menu() -> None:
 
     font_name:str = 'microsoftjhengheimicrosoftjhengheiuibold'
     font = pygame.font.SysFont(font_name, 40)
-
+    
+    button_lectura:b.Button = b.Button(x1, 270, buttons_width, buttons_height, 'LEER PARTITURA', font, main_lectura_partituras)
+    button_edit:b.Button = b.Button(x2, 270, buttons_width, buttons_height, "EDITAR PARTITURA", font, main_edicion_partituras)
+    button_music:b.Button = b.Button(x1, 350, buttons_width, buttons_height, "TOCAR MÚSICA", font, main_musica)
+    button_options:b.Button = b.Button(x2, 350, buttons_width, buttons_height, 'AJUSTES', font, main_ajustes)
+    button_instructions:b.Button = b.Button(x1, 430, buttons_width, buttons_height, 'INSTRUCCIONES', font, lambda: main_instrucciones(buttons_width, buttons_height, font))
+    button_quit:b.Button = b.Button(x2, 430, buttons_width, buttons_height, 'QUIT', font, lambda: False)
+    
+    buttons = [button_options, button_lectura, button_music, button_edit, button_instructions, button_quit]
+    
     while running:
         error_happened:bool = False
         pygame.display.set_caption("Menú Lectura Partituras")
         clock.tick(60)/1000.0
-        
-        button_lectura:b.Button = b.Button(x1, 270, buttons_width, buttons_height, 'LEER PARTITURA', font, main_lectura_partituras)
-        button_edit:b.Button = b.Button(x2, 270, buttons_width, buttons_height, "EDITAR PARTITURA", font, main_edicion_partituras)
-        button_music:b.Button = b.Button(x1, 350, buttons_width, buttons_height, "TOCAR MÚSICA", font, main_musica)
-        button_options:b.Button = b.Button(x2, 350, buttons_width, buttons_height, 'AJUSTES', font, main_ajustes)
-        button_instructions:b.Button = b.Button(x1, 430, buttons_width, buttons_height, 'INSTRUCCIONES', font, lambda: main_instrucciones(buttons_width, buttons_height, font))
-        button_quit:b.Button = b.Button(x2, 430, buttons_width, buttons_height, 'QUIT', font, lambda: False)
-        
-        buttons = [button_options, button_lectura, button_music, button_edit, button_instructions, button_quit]
         
         
         screen = pygame.display.set_mode((w, h))

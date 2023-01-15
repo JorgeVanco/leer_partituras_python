@@ -21,7 +21,7 @@ def selected_item(listbox:tk.Listbox, indice:Indice, root:tk.Tk) -> None:
     try:
         indice.index = listbox.curselection()[0]
         
-    except IndexError: # Si no hay ninguna seleccionada, se mantiene abierta la pestaña
+    except IndexError: # Se cierra y se devuelve None (el valor por defecto de index)
         pass
     root.destroy()
 

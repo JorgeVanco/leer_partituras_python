@@ -135,7 +135,7 @@ def main_edicion_partituras() -> bool:
         raise FileNotFoundError("No se ha leído ninguna partitura todavía")
 
     INDICE_PARTITURA = elegir_partitura(partituras_existentes)
-    if not INDICE_PARTITURA:
+    if INDICE_PARTITURA == None:
         return True
     partitura:Partitura = partituras_existentes[INDICE_PARTITURA]
 

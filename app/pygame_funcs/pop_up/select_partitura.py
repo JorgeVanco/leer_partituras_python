@@ -6,7 +6,7 @@ class Indice:
     Clase para guardar el valor del índice de la partitura y poderlo modificar
     con tkinter
     """
-    def __init__(self, index:int):
+    def __init__(self, index:int = None):
         self.index = index
 
 def selected_item(listbox:tk.Listbox, indice:Indice, root:tk.Tk) -> None:
@@ -20,9 +20,10 @@ def selected_item(listbox:tk.Listbox, indice:Indice, root:tk.Tk) -> None:
     """
     try:
         indice.index = listbox.curselection()[0]
-        root.destroy()
+        
     except IndexError: # Si no hay ninguna seleccionada, se mantiene abierta la pestaña
         pass
+    root.destroy()
 
 def elegir_partitura(partituras_existentes:list[Partitura]) -> int:
     """
@@ -35,7 +36,7 @@ def elegir_partitura(partituras_existentes:list[Partitura]) -> int:
     Returns:
         indice.index (int): El índice de la partitura seleccionada en la lista de partituras
     """
-    indice = Indice(len(partituras_existentes) - 1) # Para que se devuelva el último como defecto
+    indice = Indice()
 
     root = tk.Tk()
     root.geometry("400x420")

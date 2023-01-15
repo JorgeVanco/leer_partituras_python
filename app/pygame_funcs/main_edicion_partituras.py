@@ -107,6 +107,7 @@ def limpiar(complete_path:str, resized:bool) -> None:
     if resized:
         os.remove(complete_path + "app/pygame_funcs/imagen_resized.png")
 
+
 def main_edicion_partituras() -> bool:
     """
     Dibuja imagen de la partitura con el nombre de las notas y te permite editarlas y eliminarlas.
@@ -134,6 +135,8 @@ def main_edicion_partituras() -> bool:
         raise FileNotFoundError("No se ha leído ninguna partitura todavía")
 
     INDICE_PARTITURA = elegir_partitura(partituras_existentes)
+    if not INDICE_PARTITURA:
+        return True
     partitura:Partitura = partituras_existentes[INDICE_PARTITURA]
 
     PATH = partitura.path_img_original

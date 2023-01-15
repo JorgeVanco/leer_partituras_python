@@ -160,7 +160,7 @@ def open_popup(partitura:Partitura, index: int) -> bool:
     POSIBILIDADES:dict = {
         "NOTAS_POSIBLES" : ["Do", "Re", "Mi", "Fa", "Sol", "La", "Si", "Silencio", "Clave de sol", "Armadura", "Otra figura"],
         "OCTAVAS" : {2: "Octava baja", 3: "Octava normal", 4: "Octava alta"},
-        "FIGURAS_POSIBLES" : ["Corchea", "Negra", "Blanca", "Redonda"],
+        "FIGURAS_POSIBLES" : ["Corchea", "Negra", "Blanca", "Redonda", "Negra con puntillo", "Blanca con puntillo", "Blanca + Corchea"],
         "ALTERACIONES_POSIBLES" : ["Natural", "Sostenido", "Bemol"],
         "SILENCIOS_POSIBLES" :  ["Silencio de negra", "Silencio de blanca", "Silencio de redonda", "Silencio de corchea"]
     }

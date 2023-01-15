@@ -36,6 +36,12 @@ def get_duracion(nota:Nota, TEMPO_PARTITURA:int) -> float:
         duracion = 2
     elif nota.figura == "Corchea":
         duracion = 0.25
+    elif nota.figura == "Negra con puntillo":
+        duracion = 0.75
+    elif nota.figura == "Blanca con puntillo":
+        duracion = 1.5
+    elif nota.figura == "Blanca + Corchea":
+        duracion = 1.25
     duracion *= 60/TEMPO_PARTITURA
 
     return duracion

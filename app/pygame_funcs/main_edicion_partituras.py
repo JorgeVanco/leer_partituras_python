@@ -70,10 +70,11 @@ def actualizar_partitura(partitura:Partitura, PATH:str, complete_path:str, ORDEN
         count = 0
         
         for nota in pentagrama.notas:
-
+            figura = nota.figura
             if nota.nota == "Armadura":
                 notas_afectadas_por_armadura = get_notas_afectadas_por_armadura(nota, ORDEN_SOSTENIDOS_ARMADURA, ORDEN_BEMOLES_ARMADURA)
                 alteracion_armadura  = nota.alteracion
+                figura = str(nota.numero_alteraciones)
             
             posiciones = nota.rectangulo
             org = (posiciones[2] + (abs(posiciones[3] - posiciones[2])) //
@@ -82,7 +83,7 @@ def actualizar_partitura(partitura:Partitura, PATH:str, complete_path:str, ORDEN
                 if nota.nota not in ["Clave de sol", "Armadura", "Silencio"]:
                     set_alteracion_nota(nota, notas_afectadas_por_armadura, alteracion_armadura)
                 image_rectangulos = cv.putText(
-                    image_rectangulos, nota.nota + SIMBOLOS_ALTERACIONES[nota.alteracion] + str(nota.figura), org, cv.FONT_HERSHEY_SIMPLEX, AJUSTES.FONT_SIZE, 0, 1, cv.LINE_AA)
+                    image_rectangulos, nota.nota + SIMBOLOS_ALTERACIONES[nota.alteracion] + str(figura), org, cv.FONT_HERSHEY_SIMPLEX, AJUSTES.FONT_SIZE, 0, 1, cv.LINE_AA)
             count += 1
 
     saved_correctly = cv.imwrite(complete_path + "app/pygame_funcs/imagenes_editadas/imagen_partitura_modificada.png", image_rectangulos)

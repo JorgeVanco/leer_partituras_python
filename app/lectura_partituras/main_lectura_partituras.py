@@ -24,16 +24,12 @@ def guardar_partitura_analizada(partitura:Partitura) -> None:
     """
     complete_path = f.find_complete_path(__file__)
     try:
-        with open(complete_path + "app/notas_partituras/notas_pruebas.obj", "wb") as fh:
-            pickle.dump(partitura.notas, fh)
+        with open(complete_path + "app/notas_partituras/partituras_guardadas.obj", "wb") as fh:
+            pickle.dump(partitura, fh)
     except FileNotFoundError:
         os.mkdir(complete_path + "app/notas_partituras")
-        with open(complete_path + "app/notas_partituras/notas_pruebas.obj", "wb") as fh:
-            pickle.dump(partitura.notas, fh)
-
-
-    with open(complete_path + "app/pygame_funcs/partes_imagenes.obj", "wb") as fh:
-        pickle.dump(partitura, fh)
+        with open(complete_path + "app/notas_partituras/partituras_guardadas.obj", "wb") as fh:
+            pickle.dump(partitura, fh)
 
 def main_lectura_partituras() -> bool:
     """

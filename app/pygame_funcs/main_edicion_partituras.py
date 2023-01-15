@@ -123,7 +123,7 @@ def main_edicion_partituras() -> bool:
     GRAY = (150, 150, 150)
 
     # Carga los datos de la partitura
-    with open(complete_path + "app/pygame_funcs/partes_imagenes.obj", "rb") as fh:
+    with open(complete_path + "app/notas_partituras/partituras_guardadas.obj", "rb") as fh:
         partitura:Partitura = pickle.load(fh)
     
     PATH = partitura.path_img_original
@@ -221,6 +221,6 @@ def main_edicion_partituras() -> bool:
 
     limpiar(complete_path, partitura.resized)
 
-    with open(complete_path + "app/notas_partituras/notas_pruebas.obj", "wb") as fh:
+    with open(complete_path + "app/notas_partituras/partituras_guardadas.obj", "wb") as fh:
         pickle.dump(partitura, fh)
     return True

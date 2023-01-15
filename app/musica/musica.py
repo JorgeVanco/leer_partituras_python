@@ -56,7 +56,7 @@ def main_musica() -> bool:
     pygame.init()
 
     try:
-        with open(complete_path + "app/notas_partituras/notas_pruebas.obj", "rb") as fh:
+        with open(complete_path + "app/notas_partituras/partituras_guardadas.obj", "rb") as fh:
             partitura = pickle.load(fh)
     except FileNotFoundError:
         raise FileNotFoundError("No se ha leído ninguna partitura todavía")
